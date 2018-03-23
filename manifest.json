@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "WebExtension Print Example",
+    "version": "1.0.0",
+    "description": "A WebExtension to demonstrate how to print content from WebExtensions.",
+    "author": "Marco Oetz",
+    "applications": {
+        "gecko": {
+            "id": "dev@marcooetz.de"
+        }
+    },
+    "icons": {
+        "48": "icons/logo.png"
+    },
+    "browser_action": {
+        "default_icon": {
+            "16": "icons/logo.png",
+            "32": "icons/logo.png"
+        },
+        "default_popup": "popup/index.html",
+    }
+}
