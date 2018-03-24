@@ -17,6 +17,9 @@
             "16": "icons/logo.png",
             "32": "icons/logo.png"
         },
-        "default_popup": "popup/index.html",
-    }
+        "default_popup": "popup/index.html"
+    },
+    "permissions": [
+        "<all_urls>"
+    ]
 }
