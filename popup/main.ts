@@ -1,7 +1,19 @@
 import * as jquery from 'jquery';
+import { PdfCreator } from './pdf-creator';
+import { RedmineRequester } from './redmine-requester';
 
-jquery(document).ready(() => {
-    loadPdfAsBlob('http://localhost:8000/test.pdf', objectUrl => {
+class Main {
+
+    constructor(
+        private pdfCreator: PdfCreator,
+        private redmineRequester: RedmineRequester) { }
+
+    public async main() {
+        // load ticket
+        const ticket = await this.redmineRequester.getTicket(11645);
+        // create pdf
+        const pdfBlob = this.pdfCreator.createPdf(ticket);
+        const objectUrl = window.URL.createObjectURL(pdfBlob);
         // create element
         console.log(`ObjectURL: ${objectUrl}`);
         const element = document.createElement('iframe');
@@ -14,18 +26,13 @@ jquery(document).ready(() => {
         } else {
             console.error('Element #content not found.');
         }
-    });
-});
+    }
 
-function loadPdfAsBlob(url: string, onLoaded: (objectUrl) => void) {
-    const req = new XMLHttpRequest();
-    req.open('GET', url, true);
-    req.responseType = 'blob';
-    req.onload = event => {
-        const blob = req.response;
-        console.log(`Blob: ${blob}`);
-        const objectUrl = window.URL.createObjectURL(blob);
-        onLoaded(objectUrl);
-    };
-    req.send();
 }
+
+jquery(document).ready(() => {
+    new Main(
+        new PdfCreator(),
+        new RedmineRequester())
+        .main();
+});
