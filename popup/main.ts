@@ -1,18 +1,19 @@
 import * as jquery from 'jquery';
-import { PdfCreator } from './pdf-creator';
-import { RedmineRequester } from './redmine-requester';
+import { RedmineRequester } from '../shared/redmine-requester';
+import { TicketPdfCreator } from '../shared/ticket-pdf-creator/ticket-pdf-creator';
 
 class Main {
 
     constructor(
-        private pdfCreator: PdfCreator,
+        private ticketPdfCreator: TicketPdfCreator,
         private redmineRequester: RedmineRequester) { }
 
     public async main() {
         // load ticket
         const ticket = await this.redmineRequester.getTicket(11645);
+        const ticket2 = await this.redmineRequester.getTicket(11645);
         // create pdf
-        const pdfBlob = this.pdfCreator.createPdf(ticket);
+        const pdfBlob = this.ticketPdfCreator.createTicketPdf(3, [ticket, ticket2]);
         const objectUrl = window.URL.createObjectURL(pdfBlob);
         // create element
         console.log(`ObjectURL: ${objectUrl}`);
@@ -32,7 +33,7 @@ class Main {
 
 jquery(document).ready(() => {
     new Main(
-        new PdfCreator(),
+        new TicketPdfCreator(),
         new RedmineRequester())
         .main();
 });
