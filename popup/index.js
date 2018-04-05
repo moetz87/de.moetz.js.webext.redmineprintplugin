@@ -252,18 +252,23 @@ var a=function(){function t(){this.pos=0,this.bufferLength=0,this.eof=!1,this.bu
 Object.defineProperty(exports, "__esModule", { value: true });
 const jquery = __webpack_require__(2);
 const redmine_requester_1 = __webpack_require__(3);
-const ticket_pdf_creator_1 = __webpack_require__(4);
+const ticket_pdf_1 = __webpack_require__(10);
 class Main {
-    constructor(ticketPdfCreator, redmineRequester) {
-        this.ticketPdfCreator = ticketPdfCreator;
+    constructor(redmineRequester) {
         this.redmineRequester = redmineRequester;
     }
     async main() {
         // load ticket
-        const ticket = await this.redmineRequester.getTicket(11645);
-        const ticket2 = await this.redmineRequester.getTicket(11645);
+        const ticket1 = await this.redmineRequester.getTicket(11405);
+        const ticket2 = await this.redmineRequester.getTicket(12077);
+        const ticket3 = await this.redmineRequester.getTicket(11442);
+        const ticket4 = await this.redmineRequester.getTicket(11443);
+        const ticket5 = await this.redmineRequester.getTicket(12148);
+        const ticket6 = await this.redmineRequester.getTicket(12154);
         // create pdf
-        const pdfBlob = this.ticketPdfCreator.createTicketPdf(3, [ticket, ticket2]);
+        const pdf = new ticket_pdf_1.TicketPdf(3);
+        [ticket1, ticket2, ticket3, ticket4, ticket5, ticket6, ticket6].forEach(ticket => pdf.addTicket(ticket));
+        const pdfBlob = pdf.create();
         const objectUrl = window.URL.createObjectURL(pdfBlob);
         // create element
         console.log(`ObjectURL: ${objectUrl}`);
@@ -281,8 +286,7 @@ class Main {
     }
 }
 jquery(document).ready(() => {
-    new Main(new ticket_pdf_creator_1.TicketPdfCreator(), new redmine_requester_1.RedmineRequester())
-        .main();
+    new Main(new redmine_requester_1.RedmineRequester()).main();
 });
 
 
@@ -10667,48 +10671,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class RedmineRequester {
     getTicket(id) {
         return new Promise((resolve, reject) => {
-            // const url = `http://redmine/redmine/issues/${id}.json`;
-            // const req = new XMLHttpRequest();
-            // req.open('GET', url, true);
-            // req.onload = event => {
-            //     const response = JSON.parse(req.response);
-            //     resolve(response);
-            // };
-            // req.send();
-            resolve(RedmineRequester.JSON.issue);
+            const url = `http://redmine/redmine/issues/${id}.json`;
+            const req = new XMLHttpRequest();
+            req.open('GET', url, true);
+            req.onload = event => {
+                const response = JSON.parse(req.response);
+                const ticket = response.issue;
+                resolve(ticket);
+            };
+            req.send();
         });
     }
 }
-RedmineRequester.JSON = { "issue": { "status": { "name": "Neu", "id": 1 }, "project": { "name": "Basiskonnektor Erweiterungen", "id": 102 }, "category": { "name": "EvT (KoCo)", "id": 563 }, "author": { "name": "Thomas Spadzinski", "id": 20 }, "subject": "KOCOTL-1612@JIRA: Anpassung TUC_KON_005 \u201eCard-to-Card authentisieren\u201c", "created_on": "2018/01/31 13:39:06 +0100", "assigned_to": { "name": "team kococonnector", "id": 39 }, "start_date": "2018/01/31", "custom_fields": [{ "value": "Iterationsfeature", "name": "Featuretyp", "id": 8 }, { "value": "23", "name": "BacklogNr", "id": 9 }, { "value": "1", "name": "Komplexit\u00e4tspunkte", "id": 10 }, { "value": "06", "name": "Iteration", "id": 13 }], "done_ratio": 0, "updated_on": "2018/03/23 14:45:05 +0100", "description": "*Epic Link:*\r\n* Spezifikations\u00e4nderungen gem\u00e4\u00df \u201eOPB2.1.1 Anpassungen Konnektor\u201c\r\n\r\n*Acceptance Criteria:*\r\n* Verhalten lt. Spezifikation ge\u00e4ndert\r\n\r\n*Beschreibung:*\r\n\r\nge\u00e4ndert: Ablauf,\r\nentf\u00e4llt: Fehlerverhalten,\r\nentf\u00e4llt: 4228\r\n\r\nbetrifft\r\nTIP1-A_4572\r\n", "id": 11429, "fixed_version": { "name": "R 2.3.0", "id": 249 }, "priority": { "name": "Normal", "id": 4 }, "tracker": { "name": "Feature", "id": 2 } } };
 exports.RedmineRequester = RedmineRequester;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsPDF = __webpack_require__(0);
-const document_1 = __webpack_require__(8);
-const DOC_HEIGHT = new jsPDF('p', 'pt', 'a4').internal.pageSize.height;
-const DOC_WIDTH = new jsPDF('p', 'pt', 'a4').internal.pageSize.width;
-const DOC_MARGIN = 10;
-class TicketPdfCreator {
-    createTicketPdf(ticketsPerPage, tickets) {
-        const doc = new document_1.Document(DOC_WIDTH, DOC_HEIGHT, DOC_MARGIN, 3, 12, 16);
-        tickets.map(this.ticketToRow).forEach(row => doc.addRow(row));
-        return doc.create().output('blob');
-    }
-    ticketToRow(ticket) {
-        return new document_1.Row('center', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight');
-    }
-}
-exports.TicketPdfCreator = TicketPdfCreator;
-
-
-/***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, exports) {
 
@@ -10762,11 +10741,11 @@ module.exports = __webpack_amd_options__;
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsPDF = __webpack_require__(0);
 class Document {
-    constructor(width, height, margin, rowsPerPage, fontSize, fontSizeLarge) {
+    constructor(rowsPerPage, width, height, margin, fontSize, fontSizeLarge) {
+        this.rowsPerPage = rowsPerPage;
         this.width = width;
         this.height = height;
         this.margin = margin;
-        this.rowsPerPage = rowsPerPage;
         this.fontSize = fontSize;
         this.fontSizeLarge = fontSizeLarge;
         this.rows = [];
@@ -10780,18 +10759,42 @@ class Document {
     create() {
         const doc = new jsPDF('p', 'pt', 'a4'); // orientation, unit, format
         this.rows.forEach((row, rowNumber) => {
-            // top
+            const rowOnPage = rowNumber % this.rowsPerPage;
+            // general
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(this.fontSize);
-            doc.text(row.topLeft, this.calcLeft(), this.calcTop(rowNumber));
-            doc.text(row.topRight, this.calcRight(), this.calcTop(rowNumber), 'right');
+            doc.setFontType('normal');
+            // top
+            doc.text(row.topLeft, this.calcLeft(), this.calcTop(rowOnPage));
+            doc.text(row.topRight, this.calcRight(), this.calcTop(rowOnPage), 'right');
             // bottom
-            doc.text(row.bottomLeft, this.calcLeft(), this.calcBottom(rowNumber));
-            doc.text(row.bottomRight, this.calcRight(), this.calcBottom(rowNumber), 'right');
+            doc.text(row.bottomLeft, this.calcLeft(), this.calcBottom(rowOnPage));
+            doc.text(row.bottomRight, this.calcRight(), this.calcBottom(rowOnPage), 'right');
             // center
             doc.setFontSize(this.fontSizeLarge);
-            doc.text(row.center, this.calcCenter(), this.calcMiddle(rowNumber), 'center');
+            const center = doc.splitTextToSize(row.center, this.width);
+            doc.text(center, this.calcCenter(), this.calcMiddle(rowOnPage), 'center');
+            // end
+            this.drawLineOrCreateNewPage(doc, rowNumber);
         });
         return doc;
+    }
+    drawLineOrCreateNewPage(document, rowNumber) {
+        const rowOnPage = (rowNumber % this.rowsPerPage) + 1;
+        if (rowOnPage === this.rowsPerPage) {
+            if (rowNumber + 1 !== this.rows.length) {
+                console.log('page is full. add page.');
+                document.addPage();
+            }
+            else {
+                console.log('page if full, but last row. not adding page.');
+            }
+        }
+        else {
+            console.log('page is not full. draw line.');
+            const y = (this.height / this.rowsPerPage) * rowOnPage;
+            document.line(0, y, this.width, y);
+        }
     }
     calcTop(rowPos) {
         return (rowPos * this.heightRow) + this.margin + this.fontSize;
@@ -10823,6 +10826,56 @@ class Row {
     }
 }
 exports.Row = Row;
+
+
+/***/ }),
+/* 9 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const document_1 = __webpack_require__(8);
+const DOC_HEIGHT = 841.89;
+const DOC_WIDTH = 595.28;
+const DOC_MARGIN = 10;
+const FONT_SIZE = 12;
+const FONT_SIZE_LARGE = 16;
+class TicketPdf {
+    constructor(ticketsPerPage) {
+        this.ticketsPerPage = ticketsPerPage;
+        this.tickets = [];
+    }
+    addTicket(ticket) {
+        this.tickets.push(ticket);
+        return this;
+    }
+    create() {
+        const doc = new document_1.Document(this.ticketsPerPage, DOC_WIDTH, DOC_HEIGHT, DOC_MARGIN, FONT_SIZE, FONT_SIZE_LARGE);
+        this.tickets.map(ticket => this.ticketToRow(ticket)).forEach(row => doc.addRow(row));
+        return doc.create().output('blob');
+    }
+    ticketToRow(ticket) {
+        console.log(`Ticket has ${ticket.tracker.name} Type`);
+        switch (ticket.tracker.name) {
+            case 'Feature':
+                return new document_1.Row(ticket.subject, `Feature #${ticket.id}`, `Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`, '', `${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`);
+            case 'Kundenfeedback':
+                return new document_1.Row(ticket.subject, `Feature #${ticket.id}`, `Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`, `Priorität ${ticket.priority.name}`, `${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`);
+            case 'Karte':
+            case 'Misc':
+                return new document_1.Row(ticket.subject, `Karte #${ticket.id}`, '', `Priorität ${ticket.priority.name}`, `Feature #${ticket.parent.id}`);
+            default:
+                throw new Error(`Tracker ${ticket.tracker.name} not known!`);
+        }
+    }
+    getCustomField(ticket, fieldname) {
+        const backlogNrField = ticket.custom_fields.find(field => field.name === fieldname);
+        return backlogNrField.value;
+    }
+}
+exports.TicketPdf = TicketPdf;
 
 
 /***/ })

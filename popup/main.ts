@@ -1,19 +1,24 @@
 import * as jquery from 'jquery';
 import { RedmineRequester } from '../shared/redmine-requester';
-import { TicketPdfCreator } from '../shared/ticket-pdf-creator/ticket-pdf-creator';
+import { TicketPdf } from '../shared/ticket-pdf-creator/ticket-pdf';
 
 class Main {
 
     constructor(
-        private ticketPdfCreator: TicketPdfCreator,
         private redmineRequester: RedmineRequester) { }
 
     public async main() {
         // load ticket
-        const ticket = await this.redmineRequester.getTicket(11645);
-        const ticket2 = await this.redmineRequester.getTicket(11645);
+        const ticket1 = await this.redmineRequester.getTicket(11405);
+        const ticket2 = await this.redmineRequester.getTicket(12077);
+        const ticket3 = await this.redmineRequester.getTicket(11442);
+        const ticket4 = await this.redmineRequester.getTicket(11443);
+        const ticket5 = await this.redmineRequester.getTicket(12148);
+        const ticket6 = await this.redmineRequester.getTicket(12154);
         // create pdf
-        const pdfBlob = this.ticketPdfCreator.createTicketPdf(3, [ticket, ticket2]);
+        const pdf = new TicketPdf(3);
+        [ticket1, ticket2, ticket3, ticket4, ticket5, ticket6, ticket6].forEach(ticket => pdf.addTicket(ticket));
+        const pdfBlob = pdf.create();
         const objectUrl = window.URL.createObjectURL(pdfBlob);
         // create element
         console.log(`ObjectURL: ${objectUrl}`);
@@ -32,8 +37,5 @@ class Main {
 }
 
 jquery(document).ready(() => {
-    new Main(
-        new TicketPdfCreator(),
-        new RedmineRequester())
-        .main();
+    new Main(new RedmineRequester()).main();
 });

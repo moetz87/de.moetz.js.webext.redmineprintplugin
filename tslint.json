@@ -2,6 +2,7 @@
     "extends": "tslint-microsoft-contrib",
     "rules": {
         "export-name": false,
+        "interface-name": false,
         "missing-jsdoc": false,
         "newline-before-return": false,
         "no-any": false,

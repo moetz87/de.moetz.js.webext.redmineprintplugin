@@ -7,10 +7,10 @@ export class Document {
     private heightRowHalf: number;
 
     constructor(
+        private rowsPerPage: number,
         private width: number,
         private height: number,
         private margin: number,
-        private rowsPerPage: number,
         private fontSize: number,
         private fontSizeLarge: number
     ) {
@@ -26,18 +26,41 @@ export class Document {
     public create(): jsPDF {
         const doc = new jsPDF('p', 'pt', 'a4'); // orientation, unit, format
         this.rows.forEach((row, rowNumber) => {
-            // top
+            const rowOnPage = rowNumber % this.rowsPerPage;
+            // general
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(this.fontSize);
-            doc.text(row.topLeft, this.calcLeft(), this.calcTop(rowNumber));
-            doc.text(row.topRight, this.calcRight(), this.calcTop(rowNumber), 'right');
+            doc.setFontType('normal');
+            // top
+            doc.text(row.topLeft, this.calcLeft(), this.calcTop(rowOnPage));
+            doc.text(row.topRight, this.calcRight(), this.calcTop(rowOnPage), 'right');
             // bottom
-            doc.text(row.bottomLeft, this.calcLeft(), this.calcBottom(rowNumber));
-            doc.text(row.bottomRight, this.calcRight(), this.calcBottom(rowNumber), 'right');
+            doc.text(row.bottomLeft, this.calcLeft(), this.calcBottom(rowOnPage));
+            doc.text(row.bottomRight, this.calcRight(), this.calcBottom(rowOnPage), 'right');
             // center
             doc.setFontSize(this.fontSizeLarge);
-            doc.text(row.center, this.calcCenter(), this.calcMiddle(rowNumber), 'center');
+            const center = doc.splitTextToSize(row.center, this.width);
+            doc.text(center, this.calcCenter(), this.calcMiddle(rowOnPage), 'center');
+            // end
+            this.drawLineOrCreateNewPage(doc, rowNumber);
         });
         return doc;
+    }
+
+    private drawLineOrCreateNewPage(document: jsPDF, rowNumber: number) {
+        const rowOnPage = (rowNumber % this.rowsPerPage) + 1;
+        if (rowOnPage === this.rowsPerPage) {
+            if (rowNumber + 1 !== this.rows.length) {
+                console.log('page is full. add page.');
+                document.addPage();
+            } else {
+                console.log('page if full, but last row. not adding page.');
+            }
+        } else {
+            console.log('page is not full. draw line.');
+            const y = (this.height / this.rowsPerPage) * rowOnPage;
+            document.line(0, y, this.width, y);
+        }
     }
 
     private calcTop(rowPos: number): number {
