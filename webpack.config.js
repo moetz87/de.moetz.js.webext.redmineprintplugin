@@ -29,7 +29,6 @@ class Setting {
 }
 
 var settings = [
-    new Setting('popup/main.ts', 'popup/', 'index.js'),
     new Setting('content-scripts/printbuttons.ts', 'content-scripts', 'printbuttons.js')
 ];
 

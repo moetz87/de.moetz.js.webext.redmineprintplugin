@@ -12,13 +12,6 @@
     "icons": {
         "48": "icons/logo.png"
     },
-    "browser_action": {
-        "default_icon": {
-            "16": "icons/logo.png",
-            "32": "icons/logo.png"
-        },
-        "default_popup": "popup/index.html"
-    },
     "content_scripts": [
         {
             "matches": [

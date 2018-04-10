@@ -1,31 +1,34 @@
 import * as jquery from 'jquery';
-//import { RedmineRequester } from '../shared/redmine-requester';
+import { PdfCreator } from '../shared/pdf-creator';
+import { RedmineRequester } from '../shared/redmine-requester';
+import { TicketPrinter } from '../shared/ticket-printer';
+import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+
+const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte"))';
+const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature"))';
+const SELECTOR_TR_SELECTED = 'tr.context-menu-selection';
 
 class Main {
 
-    // constructor(
-    //     private redmineRequester: RedmineRequester) { }
+    constructor(
+        private ticketPrinter: TicketPrinter) { }
 
     public async main() {
-        const th = document.createElement('th');
-        jquery('table.issues > thead > tr').append(th);
-
-        jquery('tr.issue').each((i, e) => {
-            const tr = jquery(e);
-            const id = tr.find('td.id > a').text();
-            const button = this.createButton('Drucken', () => [parseInt(id, 10)]);
-            const td = document.createElement('td');
-            td.appendChild(button);
-            tr.append(td);
-        });
-
-        jquery('#sidebar').append(jquery('<h3>Drucken</h3>'));
-        const allTicketsIds = () => this.findIds('tr:has(td.tracker:contains("Karte"))');
-        jquery('#sidebar').append(this.createButton('Alle Karten', allTicketsIds));
-        const allFeatureIds = () => this.findIds('tr:has(td.tracker:contains("Feature"))');
-        jquery('#sidebar').append(this.createButton('Alle Features', allFeatureIds));
-        const allSelectedIds = () => this.findIds('tr.context-menu-selection');
-        jquery('#sidebar').append(this.createButton('Ausgewählte', allSelectedIds));
+        // append header
+        const header = jquery('<h3>Drucken</h3>');
+        jquery('#sidebar').append(header);
+        // append print all tickets
+        const allTicketsIds = () => this.findIds(SELECTOR_TR_KARTE);
+        const printAllTicketsBtn = this.createPrintButton('Alle Karten', allTicketsIds);
+        jquery('#sidebar').append(printAllTicketsBtn);
+        // append print all features
+        const allFeatureIds = () => this.findIds(SELECTOR_TR_FEATURE);
+        const printAllFeaturesBtn = this.createPrintButton('Alle Features', allFeatureIds);
+        jquery('#sidebar').append(printAllFeaturesBtn);
+        // append print selected
+        const allSelectedIds = () => this.findIds(SELECTOR_TR_SELECTED);
+        const printAllSelectedBtn = this.createPrintButton('Ausgewählte', allSelectedIds);
+        jquery('#sidebar').append(printAllSelectedBtn);
     }
 
     private findIds(selector: string): number[] {
@@ -38,36 +41,23 @@ class Main {
         return ids;
     }
 
-    private createButton(caption: string, ids: () => number[]): HTMLAnchorElement {
+    private createPrintButton(caption: string, ids: () => number[]): HTMLAnchorElement {
         const button = document.createElement('a');
         button.innerText = caption;
         button.style.display = 'block';
         button.style.cursor = 'pointer';
-        button.onclick = () => this.print(ids());
+        button.onclick = () => this.ticketPrinter.printTickets(ids());
         return button;
-    }
-
-    private async print(ids: number[]) {
-        /*
-        const tickets = await Promise.all(ids.map(id => this.redmineRequester.getTicket(id)));
-        // create pdf
-        const pdf = new TicketPdf(3);
-        tickets.forEach(ticket => pdf.addTicket(ticket));
-        const pdfBlob = pdf.create();
-        const objectUrl = window.URL.createObjectURL(pdfBlob);
-        // create element
-        console.log(`ObjectURL: ${objectUrl}`);
-        const element = document.createElement('iframe');
-        element.src = objectUrl;
-        element.className = 'printframe';
-        // append element
-        window.open(objectUrl);
-        */
     }
 
 }
 
 jquery(document).ready(() => {
-    //new Main(new RedmineRequester()).main();
-    new Main().main();
+    new Main(
+        new TicketPrinter(
+            new RedmineRequester(),
+            new TicketToRowConverter(),
+            new PdfCreator()
+        )
+    ).main();
 });
