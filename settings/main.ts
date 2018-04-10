@@ -1,14 +1,16 @@
-import * as jquery from 'jquery';
+import { AbstractMain } from '../shared/abstract-main';
 import { SettingsLoader } from '../shared/utils/settings-loader';
 import { UserInterface } from './user-interface';
 
-export class Main {
+export class Main extends AbstractMain {
 
     constructor(
         readonly ui: UserInterface,
-        readonly settingsLoader: SettingsLoader) { }
+        readonly settingsLoader: SettingsLoader) {
+        super();
+    }
 
-    public main() {
+    public onExecuteMain() {
         this.registerEventHandler();
         this.settingsLoader.load().then(this.ui.setSettings);
     }
@@ -25,9 +27,7 @@ export class Main {
 
 }
 
-jquery(document).ready(() => {
-    new Main(
-        new UserInterface(),
-        new SettingsLoader()
-    ).main();
-});
+new Main(
+    new UserInterface(),
+    new SettingsLoader()
+).main();
