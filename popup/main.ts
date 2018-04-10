@@ -1,11 +1,22 @@
 import * as jquery from 'jquery';
+import { Document } from '../shared/model/document';
+import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
-import { TicketPdf } from '../shared/ticket-pdf-creator/ticket-pdf';
+import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+
+const ROWS_PER_PAGE = 3;
+const DOC_HEIGHT = 841.89;
+const DOC_WIDTH = 595.28;
+const DOC_MARGIN = 10;
+const FONT_SIZE = 12;
+const FONT_SIZE_LARGE = 16;
 
 class Main {
 
     constructor(
-        private redmineRequester: RedmineRequester) { }
+        private redmineRequester: RedmineRequester,
+        private ticketToRowConverter: TicketToRowConverter,
+        private pdfCreator: PdfCreator) { }
 
     public async main() {
         // load ticket
@@ -20,27 +31,25 @@ class Main {
         const ticket3 = await this.redmineRequester.getTicket(3);
         const ticket4 = await this.redmineRequester.getTicket(4);
         const ticket5 = await this.redmineRequester.getTicket(5);
+        // create doc
+        const doc = new Document(ROWS_PER_PAGE, DOC_WIDTH, DOC_HEIGHT, DOC_MARGIN, FONT_SIZE, FONT_SIZE_LARGE);
+        [ticket1, ticket2, ticket3, ticket4, ticket5]
+            .map(t => this.ticketToRowConverter.convert(t))
+            .forEach(t => doc.addRow(t));
         // create pdf
-        const pdf = new TicketPdf(3);
-        [ticket1, ticket2, ticket3, ticket4, ticket5, ticket5].forEach(ticket => pdf.addTicket(ticket));
-        const pdfBlob = pdf.create();
+        const pdf = this.pdfCreator.create(doc);
+        const pdfBlob = pdf.output('blob');
         const objectUrl = window.URL.createObjectURL(pdfBlob);
-        // create element
-        console.log(`ObjectURL: ${objectUrl}`);
-        const element = document.createElement('iframe');
-        element.src = objectUrl;
-        element.className = 'printframe';
-        // append element
-        const content = document.getElementById('content');
-        if (content != null) {
-            content.appendChild(element);
-        } else {
-            console.error('Element #content not found.');
-        }
+        // print pdf
+        window.open(objectUrl);
     }
 
 }
 
 jquery(document).ready(() => {
-    new Main(new RedmineRequester()).main();
+    new Main(
+        new RedmineRequester(),
+        new TicketToRowConverter(),
+        new PdfCreator()
+    ).main();
 });

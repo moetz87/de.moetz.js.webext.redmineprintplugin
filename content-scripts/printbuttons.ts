@@ -1,11 +1,10 @@
 import * as jquery from 'jquery';
-import { RedmineRequester } from '../shared/redmine-requester';
-import { TicketPdf } from '../shared/ticket-pdf-creator/ticket-pdf';
+//import { RedmineRequester } from '../shared/redmine-requester';
 
 class Main {
 
-    constructor(
-        private redmineRequester: RedmineRequester) { }
+    // constructor(
+    //     private redmineRequester: RedmineRequester) { }
 
     public async main() {
         const th = document.createElement('th');
@@ -49,6 +48,7 @@ class Main {
     }
 
     private async print(ids: number[]) {
+        /*
         const tickets = await Promise.all(ids.map(id => this.redmineRequester.getTicket(id)));
         // create pdf
         const pdf = new TicketPdf(3);
@@ -62,10 +62,12 @@ class Main {
         element.className = 'printframe';
         // append element
         window.open(objectUrl);
+        */
     }
 
 }
 
 jquery(document).ready(() => {
-    new Main(new RedmineRequester()).main();
+    //new Main(new RedmineRequester()).main();
+    new Main().main();
 });

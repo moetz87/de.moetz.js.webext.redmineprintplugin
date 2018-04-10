@@ -1,69 +1,69 @@
 export interface Ticket {
-    status: Status;
-    project: Project;
-    category: Category;
-    author: Author;
-    subject: string;
-    created_on: string;
-    assigned_to: AssignedTo;
-    start_date: string;
-    custom_fields: CustomField[];
-    done_ratio: number;
-    updated_on: string;
-    description: string;
-    parent: Parent;
-    id: number;
-    fixed_version: FixedVersion;
-    priority: Priority;
-    tracker: Tracker;
+    readonly status: Status;
+    readonly project: Project;
+    readonly category: Category;
+    readonly author: Author;
+    readonly subject: string;
+    readonly created_on: string;
+    readonly assigned_to: AssignedTo;
+    readonly start_date: string;
+    readonly custom_fields: CustomField[];
+    readonly done_ratio: number;
+    readonly updated_on: string;
+    readonly description: string;
+    readonly parent: Parent;
+    readonly id: number;
+    readonly fixed_version: FixedVersion;
+    readonly priority: Priority;
+    readonly tracker: Tracker;
 }
 
 export interface Status {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface Project {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface Category {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface Author {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface AssignedTo {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface CustomField {
-    value: string;
-    name: string;
-    id: number;
+    readonly value: string;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface FixedVersion {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface Priority {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface Tracker {
-    name: string;
-    id: number;
+    readonly name: string;
+    readonly id: number;
 }
 
 export interface Parent {
-    id: number;
+    readonly id: number;
 }
