@@ -1,21 +1,18 @@
 import { Ticket } from './model/ticket';
-
-const REDMINEBASEURL = 'http://localhost';
+import { SettingsLoader } from './utils/settings-loader';
 
 export class RedmineRequester {
 
-    public getTicket(id: number): Promise<Ticket> {
-        return new Promise((resolve, reject) => {
-            const url = `${REDMINEBASEURL}/issues/${id}.json`;
-            const req = new XMLHttpRequest();
-            req.open('GET', url, true);
-            req.onload = event => {
-                const response = JSON.parse(req.response);
-                const ticket = <Ticket> response.issue;
-                resolve(ticket);
-            };
-            req.send();
-        });
+    constructor(
+        private settingsLoader: SettingsLoader) { }
+
+    public async getTicket(id: number): Promise<Ticket> {
+        const settings = await this.settingsLoader.load();
+        const url = `${settings.url}/issues/${id}.json`;
+        console.log(`Request-URL: ${url}`);
+        const response = await fetch(url);
+        const data = await response.json();
+        return <Ticket> data.issue;
     }
 
 }

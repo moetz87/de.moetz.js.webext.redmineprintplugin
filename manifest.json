@@ -12,6 +12,9 @@
     "icons": {
         "48": "icons/logo.png"
     },
+    "options_ui": {
+        "page": "settings/index.html"
+    },
     "content_scripts": [
         {
             "matches": [
@@ -23,6 +26,7 @@
         }
     ],
     "permissions": [
+        "storage",
         "<all_urls>"
     ]
 }

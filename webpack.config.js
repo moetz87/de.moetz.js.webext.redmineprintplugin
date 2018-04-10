@@ -29,6 +29,7 @@ class Setting {
 }
 
 var settings = [
+    new Setting('settings/main.ts', 'settings', 'index.js'),
     new Setting('content-scripts/printbuttons.ts', 'content-scripts', 'printbuttons.js')
 ];
 

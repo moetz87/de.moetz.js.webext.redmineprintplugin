@@ -3,7 +3,8 @@ import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
-import { UrlUtils } from '../shared/url-utils';
+import { UrlUtils } from '../shared/utils/url-utils';
+import { SettingsLoader } from '../shared/utils/settings-loader';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte"))';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature"))';
@@ -67,7 +68,9 @@ class Main {
 jquery(document).ready(() => {
     new Main(
         new TicketPrinter(
-            new RedmineRequester(),
+            new RedmineRequester(
+                new SettingsLoader()
+            ),
             new TicketToRowConverter(),
             new PdfCreator()
         ),
