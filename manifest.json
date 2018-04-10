@@ -1,12 +1,12 @@
 {
     "manifest_version": 2,
-    "name": "WebExtension Print Example",
+    "name": "Redmine Print Plugin",
     "version": "1.0.0",
-    "description": "A WebExtension to demonstrate how to print content from WebExtensions.",
+    "description": "A WebExtension to add Print-Buttons for Tickets to the Redmine-UI.",
     "author": "Marco Oetz",
     "applications": {
         "gecko": {
-            "id": "dev@marcooetz.de"
+            "id": "redmineprintplugin@marcooetz.de"
         }
     },
     "icons": {
