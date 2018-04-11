@@ -1,3 +1,4 @@
+import * as jQuery from 'jquery';
 import { Document } from '../shared/model/document';
 import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
@@ -46,7 +47,33 @@ export class TicketPrinter {
     }
 
     private print(objectUrl: string) {
-        window.open(objectUrl);
+        const overlay = document.createElement('div');
+        overlay.id = 'printingoverlay';
+        overlay.style.position = 'fixed';
+        overlay.style.width = 'calc(100% - 50px - 50px)';
+        overlay.style.height = 'calc(100% - 50px - 50px)';
+        overlay.style.top = '50px';
+        overlay.style.left = '50px';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.zIndex = '20';
+        overlay.style.backgroundColor = '#4B4B4B';
+        overlay.style.textAlign = 'right';
+
+        const iframe = document.createElement('iframe');
+        iframe.src = objectUrl;
+        iframe.style.width = '100%';
+        iframe.style.height = 'calc(100% - 30px - 5px - 5px)';
+
+        const closebtn = document.createElement('button');
+        closebtn.textContent = 'Schließen';
+        closebtn.style.height = '30px';
+        closebtn.style.margin = '5px 10px 5px 10px';
+        closebtn.onclick = () => jQuery('#printingoverlay').remove();
+
+        overlay.appendChild(closebtn);
+        overlay.appendChild(iframe);
+        document.body.appendChild(overlay);
     }
 
 }
