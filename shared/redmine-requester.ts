@@ -6,13 +6,19 @@ export class RedmineRequester {
     constructor(
         private settingsLoader: SettingsLoader) { }
 
-    public async getTicket(id: number): Promise<Ticket> {
-        const settings = await this.settingsLoader.load();
-        const url = `${settings.url}/issues/${id}.json`;
-        console.log(`Request-URL: ${url}`);
-        const response = await fetch(url);
-        const data = await response.json();
-        return <Ticket>data.issue;
+    public getTicket(id: number): Promise<Ticket> {
+        return new Promise((resolve, reject) => {
+            this.settingsLoader.load().then(settings => {
+                const url = `${settings.url}/issues/${id}.json`;
+                const req = new XMLHttpRequest();
+                req.open('GET', url, true);
+                req.onload = event => {
+                    const response = JSON.parse(req.response);
+                    resolve(response.issue);
+                };
+                req.send();
+            });
+        });
     }
 
 }
