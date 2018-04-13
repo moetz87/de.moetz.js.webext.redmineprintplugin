@@ -15,7 +15,7 @@ export class TicketToRowConverter {
             case 'Misc':
                 return this.convertMisc(ticket);
             default:
-                throw new Error(`Tracker ${ticket.tracker.name} not known!`);
+            return this.convertUnknown(ticket);
         }
     }
 
@@ -52,6 +52,15 @@ export class TicketToRowConverter {
             `Karte #${ticket.id}`,
             '',
             `Priorität ${ticket.priority.name}`,
+            '');
+    }
+
+    private convertUnknown(ticket: Ticket): Row {
+        return new Row(
+            ticket.subject,
+            `#${ticket.id}`,
+            `Tracker: ${ticket.tracker.name}`,
+            '',
             '');
     }
 
