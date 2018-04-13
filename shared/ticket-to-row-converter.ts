@@ -1,4 +1,4 @@
-import { Row } from './model/document';
+import { Cell, Row } from './model/document';
 import { Ticket } from './model/ticket';
 
 export class TicketToRowConverter {
@@ -15,53 +15,53 @@ export class TicketToRowConverter {
             case 'Misc':
                 return this.convertMisc(ticket);
             default:
-            return this.convertUnknown(ticket);
+                return this.convertUnknown(ticket);
         }
     }
 
     private convertFeature(ticket: Ticket): Row {
         return new Row(
-            ticket.subject,
-            `Feature #${ticket.id}`,
-            `Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`,
-            '',
-            `${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`);
+            Cell.plain(ticket.subject),
+            Cell.plain(`Feature #${ticket.id}`),
+            Cell.plain(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
+            Cell.empty(),
+            Cell.plain(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
     }
 
     private convertKundenfeedback(ticket: Ticket): Row {
         return new Row(
-            ticket.subject,
-            `Feature #${ticket.id}`,
-            `Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`,
-            `Priorität ${ticket.priority.name}`,
-            `${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`);
+            Cell.plain(ticket.subject),
+            Cell.plain(`Feature #${ticket.id}`),
+            Cell.plain(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
+            Cell.plain(`Priorität ${ticket.priority.name}`),
+            Cell.plain(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
     }
 
     private convertKarte(ticket: Ticket): Row {
         return new Row(
-            ticket.subject,
-            `Karte #${ticket.id}`,
-            '',
-            `Priorität ${ticket.priority.name}`,
-            `Feature #${ticket.parent.id}`);
+            Cell.plain(ticket.subject),
+            Cell.plain(`Karte #${ticket.id}`),
+            Cell.empty(),
+            Cell.plain(`Priorität ${ticket.priority.name}`),
+            Cell.plain(`Feature #${ticket.parent.id}`));
     }
 
     private convertMisc(ticket: Ticket): Row {
         return new Row(
-            ticket.subject,
-            `Karte #${ticket.id}`,
-            '',
-            `Priorität ${ticket.priority.name}`,
-            '');
+            Cell.plain(ticket.subject),
+            Cell.plain(`Karte #${ticket.id}`),
+            Cell.empty(),
+            Cell.plain(`Priorität ${ticket.priority.name}`),
+            Cell.empty());
     }
 
     private convertUnknown(ticket: Ticket): Row {
         return new Row(
-            ticket.subject,
-            `#${ticket.id}`,
-            `Tracker: ${ticket.tracker.name}`,
-            '',
-            '');
+            Cell.plain(ticket.subject),
+            Cell.plain(`#${ticket.id}`),
+            Cell.plain(`Tracker: ${ticket.tracker.name}`),
+            Cell.empty(),
+            Cell.empty());
     }
 
     private getCustomField(ticket: Ticket, fieldname: string): any {

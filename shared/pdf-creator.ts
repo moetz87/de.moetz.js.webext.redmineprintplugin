@@ -14,14 +14,14 @@ export class PdfCreator {
             pdf.setFontSize(doc.fontSize);
             pdf.setFontType('normal');
             // top
-            pdf.text(row.topLeft, this.calcLeft(doc), this.calcTop(doc, rowOnPage));
-            pdf.text(row.topRight, this.calcRight(doc), this.calcTop(doc, rowOnPage), 'right');
+            pdf.text(row.topLeft.text, this.calcLeft(doc), this.calcTop(doc, rowOnPage));
+            pdf.text(row.topRight.text, this.calcRight(doc), this.calcTop(doc, rowOnPage), 'right');
             // bottom
-            pdf.text(row.bottomLeft, this.calcLeft(doc), this.calcBottom(doc, rowOnPage));
-            pdf.text(row.bottomRight, this.calcRight(doc), this.calcBottom(doc, rowOnPage), 'right');
+            pdf.text(row.bottomLeft.text, this.calcLeft(doc), this.calcBottom(doc, rowOnPage));
+            pdf.text(row.bottomRight.text, this.calcRight(doc), this.calcBottom(doc, rowOnPage), 'right');
             // center
             pdf.setFontSize(doc.fontSizeLarge);
-            const center = pdf.splitTextToSize(row.center, doc.width);
+            const center = pdf.splitTextToSize(row.center.text, doc.width);
             pdf.text(center, this.calcCenter(doc), this.calcMiddle(doc, rowOnPage), 'center');
             // end
             this.drawLineOrCreateNewPage(doc, pdf, rowNumber);
