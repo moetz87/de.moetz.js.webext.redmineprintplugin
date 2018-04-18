@@ -1,5 +1,5 @@
 import * as jsPDF from 'jspdf';
-import { Document } from './model/document';
+import { Cell, Document, Row } from './model/document';
 
 export class PdfCreator {
 
@@ -7,26 +7,36 @@ export class PdfCreator {
 
     public create(doc: Document): jsPDF {
         const pdf = new jsPDF('p', 'pt', 'a4'); // orientation, unit, format
-        doc.rows.forEach((row, rowNumber) => {
+        doc.rows.forEach((row: Row, rowNumber) => {
             const rowOnPage = rowNumber % doc.rowsPerPage;
-            // general
-            pdf.setTextColor(0, 0, 0);
-            pdf.setFontSize(doc.fontSize);
-            pdf.setFontType('normal');
             // top
-            pdf.text(row.topLeft.text, this.calcLeft(doc), this.calcTop(doc, rowOnPage));
-            pdf.text(row.topRight.text, this.calcRight(doc), this.calcTop(doc, rowOnPage), 'right');
+            this.setFontOptions(pdf, row.topLeft);
+            pdf.text(row.topLeft.text, this.calcLeft(doc), this.calcTop(doc, row.topLeft.fontSize, rowOnPage));
+            this.setFontOptions(pdf, row.topRight);
+            pdf.text(row.topRight.text, this.calcRight(doc), this.calcTop(doc, row.topRight.fontSize, rowOnPage), 'right');
             // bottom
+            this.setFontOptions(pdf, row.bottomLeft);
             pdf.text(row.bottomLeft.text, this.calcLeft(doc), this.calcBottom(doc, rowOnPage));
+            this.setFontOptions(pdf, row.bottomRight);
             pdf.text(row.bottomRight.text, this.calcRight(doc), this.calcBottom(doc, rowOnPage), 'right');
             // center
-            pdf.setFontSize(doc.fontSizeLarge);
+            this.setFontOptions(pdf, row.center);
             const center = pdf.splitTextToSize(row.center.text, doc.width);
             pdf.text(center, this.calcCenter(doc), this.calcMiddle(doc, rowOnPage), 'center');
             // end
             this.drawLineOrCreateNewPage(doc, pdf, rowNumber);
         });
         return pdf;
+    }
+
+    private setFontOptions(pdf: jsPDF, cell: Cell) {
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFontSize(cell.fontSize);
+        if (cell.fontBold) {
+            pdf.setFontType('bold');
+        } else {
+            pdf.setFontType('normal');
+        }
     }
 
     private drawLineOrCreateNewPage(doc: Document, pdf: jsPDF, rowNumber: number) {
@@ -45,9 +55,9 @@ export class PdfCreator {
         }
     }
 
-    private calcTop(doc: Document, rowPos: number): number {
+    private calcTop(doc: Document, fontSize: number, rowPos: number): number {
         const heightRow = doc.height / doc.rowsPerPage;
-        return (rowPos * heightRow) + doc.margin + doc.fontSize;
+        return (rowPos * heightRow) + doc.margin + fontSize;
     }
 
     private calcMiddle(doc: Document, rowPos: number): number {

@@ -9,8 +9,6 @@ const ROWS_PER_PAGE = 3;
 const HEIGHT = 841.89;
 const WIDTH = 595.28;
 const MARGIN = 10;
-const FONT_SIZE = 12;
-const FONT_SIZE_LARGE = 16;
 
 export class TicketPrinter {
 
@@ -33,7 +31,7 @@ export class TicketPrinter {
     }
 
     private createDocument(tickets: Ticket[]): Document {
-        const doc = new Document(ROWS_PER_PAGE, WIDTH, HEIGHT, MARGIN, FONT_SIZE, FONT_SIZE_LARGE);
+        const doc = new Document(ROWS_PER_PAGE, WIDTH, HEIGHT, MARGIN);
         tickets
             .map(t => this.ticketToRowConverter.convert(t))
             .forEach(t => doc.addRow(t));

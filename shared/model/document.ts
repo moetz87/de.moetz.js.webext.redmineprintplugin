@@ -1,3 +1,6 @@
+const DEFAULT_FONT_SIZE = 16;
+const DEFAULT_FONT_SIZE_LARGE = 22;
+
 export class Document {
 
     public readonly rows: Row[] = [];
@@ -6,9 +9,7 @@ export class Document {
         readonly rowsPerPage: number,
         readonly width: number,
         readonly height: number,
-        readonly margin: number,
-        readonly fontSize: number,
-        readonly fontSizeLarge: number
+        readonly margin: number
     ) { }
 
     public addRow(row: Row): Document {
@@ -33,15 +34,19 @@ export class Cell {
 
     constructor(
         readonly text: string,
-        readonly fontSize?: number,
-        readonly fontBold?: boolean) { }
+        readonly fontSize: number,
+        readonly fontBold: boolean) { }
 
     public static empty(): Cell {
-        return new Cell('', 14, false);
+        return new Cell('', DEFAULT_FONT_SIZE, false);
     }
 
-    public static plain(text: string): Cell {
-        return new Cell(text, 14, false);
+    public static normal(text: string): Cell {
+        return new Cell(text, DEFAULT_FONT_SIZE, false);
+    }
+
+    public static large(text: string): Cell {
+        return new Cell(text, DEFAULT_FONT_SIZE_LARGE, false);
     }
 
 }

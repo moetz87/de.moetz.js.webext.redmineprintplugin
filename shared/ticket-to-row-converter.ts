@@ -21,45 +21,45 @@ export class TicketToRowConverter {
 
     private convertFeature(ticket: Ticket): Row {
         return new Row(
-            Cell.plain(ticket.subject),
-            Cell.plain(`Feature #${ticket.id}`),
-            Cell.plain(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
+            Cell.large(ticket.subject),
+            Cell.normal(`Feature #${ticket.id}`),
+            Cell.normal(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
             Cell.empty(),
-            Cell.plain(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
+            Cell.normal(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
     }
 
     private convertKundenfeedback(ticket: Ticket): Row {
         return new Row(
-            Cell.plain(ticket.subject),
-            Cell.plain(`Feature #${ticket.id}`),
-            Cell.plain(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
-            Cell.plain(`Priorität ${ticket.priority.name}`),
-            Cell.plain(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
+            Cell.large(ticket.subject),
+            Cell.normal(`Feature #${ticket.id}`),
+            Cell.normal(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
+            Cell.normal(`Priorität ${ticket.priority.name}`),
+            Cell.normal(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
     }
 
     private convertKarte(ticket: Ticket): Row {
         return new Row(
-            Cell.plain(ticket.subject),
-            Cell.plain(`Karte #${ticket.id}`),
+            Cell.large(ticket.subject),
+            Cell.normal(`Karte #${ticket.id}`),
             Cell.empty(),
-            Cell.plain(`Priorität ${ticket.priority.name}`),
-            Cell.plain(`Feature #${ticket.parent.id}`));
+            Cell.normal(`Priorität ${ticket.priority.name}`),
+            Cell.normal(`Feature #${ticket.parent.id}`));
     }
 
     private convertMisc(ticket: Ticket): Row {
         return new Row(
-            Cell.plain(ticket.subject),
-            Cell.plain(`Karte #${ticket.id}`),
+            Cell.large(ticket.subject),
+            Cell.normal(`Karte #${ticket.id}`),
             Cell.empty(),
-            Cell.plain(`Priorität ${ticket.priority.name}`),
+            Cell.normal(`Priorität ${ticket.priority.name}`),
             Cell.empty());
     }
 
     private convertUnknown(ticket: Ticket): Row {
         return new Row(
-            Cell.plain(ticket.subject),
-            Cell.plain(`#${ticket.id}`),
-            Cell.plain(`Tracker: ${ticket.tracker.name}`),
+            Cell.large(ticket.subject),
+            Cell.normal(`#${ticket.id}`),
+            Cell.normal(`Tracker: ${ticket.tracker.name}`),
             Cell.empty(),
             Cell.empty());
     }
