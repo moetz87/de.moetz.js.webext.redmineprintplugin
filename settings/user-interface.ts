@@ -1,4 +1,4 @@
-import { Settings } from '../shared/model/settings';
+import { Formatting, Settings } from '../shared/model/settings';
 
 export class UserInterface {
 
@@ -27,12 +27,47 @@ export class UserInterface {
 
     public setSettings = (settings: Settings) => {
         this.getField('url').value = settings.url;
+        this.getField('topLeftFontSize').valueAsNumber = settings.topLeftFormatting.fontSize;
+        this.getField('topLeftFontBold').checked = settings.topLeftFormatting.fontBold;
+        this.getField('topRightFontSize').valueAsNumber = settings.topRightFormatting.fontSize;
+        this.getField('topRightFontBold').checked = settings.topRightFormatting.fontBold;
+        this.getField('centerFontSize').valueAsNumber = settings.centerFormatting.fontSize;
+        this.getField('centerFontBold').checked = settings.centerFormatting.fontBold;
+        this.getField('bottomLeftFontSize').valueAsNumber = settings.bottomLeftFormatting.fontSize;
+        this.getField('bottomLeftFontBold').checked = settings.bottomLeftFormatting.fontBold;
+        this.getField('bottomRightFontSize').valueAsNumber = settings.bottomRightFormatting.fontSize;
+        this.getField('bottomRightFontBold').checked = settings.bottomRightFormatting.fontBold;
     }
 
     public getSettings(): Settings {
-        return new Settings({
-            url: this.getField('url').value
-        });
+        const topLeftFormatting = new Formatting(
+            this.getField('topLeftFontSize').valueAsNumber,
+            this.getField('topLeftFontBold').checked
+        );
+        const topRightFormatting = new Formatting(
+            this.getField('topRightFontSize').valueAsNumber,
+            this.getField('topRightFontBold').checked
+        );
+        const centerFormatting = new Formatting(
+            this.getField('centerFontSize').valueAsNumber,
+            this.getField('centerFontBold').checked
+        );
+        const bottomLeftFormatting = new Formatting(
+            this.getField('bottomLeftFontSize').valueAsNumber,
+            this.getField('bottomLeftFontBold').checked
+        );
+        const bottomRightFormatting = new Formatting(
+            this.getField('bottomRightFontSize').valueAsNumber,
+            this.getField('bottomRightFontBold').checked
+        );
+        return new Settings(
+            this.getField('url').value,
+            topLeftFormatting,
+            topRightFormatting,
+            centerFormatting,
+            bottomLeftFormatting,
+            bottomRightFormatting
+        );
     }
 
     public registerOnChangeListener(callback: () => void) {

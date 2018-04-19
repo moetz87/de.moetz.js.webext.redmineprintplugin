@@ -6,7 +6,7 @@ export class SettingsLoader {
 
     public load(): Promise<Settings> {
         return browser.storage.local.get()
-            .then((json: any) => new Settings(json));
+            .then((json: any) => Settings.fromJson(json));
     }
 
     public save(settings: Settings): Promise<void> {
