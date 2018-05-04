@@ -59,41 +59,20 @@ input {
 /* Messager */
 /**************************/
 
-#messagerOverlay {
+#messager {
     position: fixed;
     display: none;
-    width: calc(100% - 2px);
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
-    border-radius: 5px;
-    background-color: rgba(146, 252, 160, 0.2);
+    padding: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    background-color: rgb(146, 252, 160);
     border: 1px solid rgb(90, 175, 100);
 }
 
-#messagerOverlay .error {
-    background-color: rgba(252, 146, 146, 0.2);
+#messager.error {
+    background-color: rgba(252, 146, 146);
     border: 1px solid rgb(192, 63, 95);
-}
-
-#messager {
-    position: fixed;
-    width: calc(100% - 4px);
-    padding: 10px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    text-align: center;
-    z-index: 3;
-    background-color: rgb(146, 252, 160);
-    border-bottom: 1px solid rgb(90, 175, 100);
-}
-
-#messager .error {
-    background-color: rgb(252, 146, 146);
-    border-bottom: 1px solid rgb(192, 63, 95);
 }
 
 /**************************/

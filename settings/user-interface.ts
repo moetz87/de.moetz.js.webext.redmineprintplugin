@@ -17,7 +17,6 @@ export class UserInterface {
         ['bottomRightFontBold', <HTMLInputElement>document.getElementById('bottomrightfontbold')]
     ]);
     private readonly messager = <HTMLElement>document.getElementById('messager');
-    private readonly messagerOverlay = <HTMLElement>document.getElementById('messagerOverlay');
     private onChangeListener: (() => void)[] = [];
 
     constructor() {
@@ -78,15 +77,13 @@ export class UserInterface {
     public showMessage(message: string) {
         this.messager.innerText = message;
         this.messager.className = '';
-        this.messagerOverlay.className = 'error';
-        this.messagerOverlay.style.display = 'block';
-        setTimeout(() => this.messagerOverlay.style.display = 'none', 2000);
+        this.messager.style.display = 'block';
+        setTimeout(() => this.messager.style.display = 'none', 2500);
     }
 
     public showErrorMessage(message: string) {
         this.showMessage(message);
         this.messager.className = 'error';
-        this.messagerOverlay.className = 'error';
     }
 
     private onFieldValueChange = () => {
