@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Redmine Print Plugin",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Eine Webextension zum Hinzufügen von Print-Buttons zur Redmine-Oberfläche.",
     "author": "Marco Oetz",
     "applications": {
