@@ -1,3 +1,5 @@
+import { Formatting } from './formatting';
+
 export class Settings {
 
     constructor(
@@ -12,16 +14,6 @@ export class Settings {
 
     public static fromJson(json: any): Settings {
         return Object.assign(new Settings(), json);
-    }
-
-}
-
-export class Formatting {
-
-    constructor(
-        public fontSize = 14,
-        public fontBold = false) {
-
     }
 
 }

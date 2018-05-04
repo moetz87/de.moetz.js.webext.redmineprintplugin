@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Redmine Print Plugin",
     "version": "1.0.3",
-    "description": "A WebExtension to add Print-Buttons for Tickets to the Redmine-UI.",
+    "description": "Eine Webextension zum Hinzufügen von Print-Buttons zur Redmine-Oberfläche.",
     "author": "Marco Oetz",
     "applications": {
         "gecko": {

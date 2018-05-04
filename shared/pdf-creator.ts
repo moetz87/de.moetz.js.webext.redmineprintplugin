@@ -11,9 +11,9 @@ export class PdfCreator {
             const rowOnPage = rowNumber % doc.rowsPerPage;
             // top
             this.setFontOptions(pdf, row.topLeft);
-            pdf.text(row.topLeft.text, this.calcLeft(doc), this.calcTop(doc, row.topLeft.fontSize, rowOnPage));
+            pdf.text(row.topLeft.text, this.calcLeft(doc), this.calcTop(doc, row.topLeft.formatting.fontSize, rowOnPage));
             this.setFontOptions(pdf, row.topRight);
-            pdf.text(row.topRight.text, this.calcRight(doc), this.calcTop(doc, row.topRight.fontSize, rowOnPage), 'right');
+            pdf.text(row.topRight.text, this.calcRight(doc), this.calcTop(doc, row.topRight.formatting.fontSize, rowOnPage), 'right');
             // bottom
             this.setFontOptions(pdf, row.bottomLeft);
             pdf.text(row.bottomLeft.text, this.calcLeft(doc), this.calcBottom(doc, rowOnPage));
@@ -31,8 +31,8 @@ export class PdfCreator {
 
     private setFontOptions(pdf: jsPDF, cell: Cell) {
         pdf.setTextColor(0, 0, 0);
-        pdf.setFontSize(cell.fontSize);
-        if (cell.fontBold) {
+        pdf.setFontSize(cell.formatting.fontSize);
+        if (cell.formatting.fontBold) {
             pdf.setFontType('bold');
         } else {
             pdf.setFontType('normal');

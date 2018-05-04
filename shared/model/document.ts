@@ -1,21 +1,17 @@
-const DEFAULT_FONT_SIZE = 16;
-const DEFAULT_FONT_SIZE_LARGE = 22;
+import { Formatting } from './formatting';
+
+const DEFAULT_FORMATTING = new Formatting(16, false);
+const DEFAULT_FORMATTING_LARGE = new Formatting(22, false);
 
 export class Document {
 
-    public readonly rows: Row[] = [];
-
     constructor(
+        readonly rows: Row[],
         readonly rowsPerPage: number,
         readonly width: number,
         readonly height: number,
         readonly margin: number
     ) { }
-
-    public addRow(row: Row): Document {
-        this.rows.push(row);
-        return this;
-    }
 
 }
 
@@ -34,19 +30,18 @@ export class Cell {
 
     constructor(
         readonly text: string,
-        readonly fontSize: number,
-        readonly fontBold: boolean) { }
+        readonly formatting: Formatting) { }
 
     public static empty(): Cell {
-        return new Cell('', DEFAULT_FONT_SIZE, false);
+        return new Cell('', DEFAULT_FORMATTING);
     }
 
     public static normal(text: string): Cell {
-        return new Cell(text, DEFAULT_FONT_SIZE, false);
+        return new Cell(text, DEFAULT_FORMATTING);
     }
 
     public static large(text: string): Cell {
-        return new Cell(text, DEFAULT_FONT_SIZE_LARGE, false);
+        return new Cell(text, DEFAULT_FORMATTING_LARGE);
     }
 
 }

@@ -1,4 +1,5 @@
-import { Formatting, Settings } from '../shared/model/settings';
+import { Formatting } from '../shared/model/formatting';
+import { Settings } from '../shared/model/settings';
 
 export class UserInterface {
 
