@@ -37,10 +37,10 @@ export class TicketToRowConverter {
         const settings = await this.settingsLoader.load();
         return new Row(
             new Cell(ticket.subject, settings.centerFormatting),
-            Cell.normal(`Feature #${ticket.id}`),
-            Cell.normal(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`),
-            Cell.normal(`Priorität ${ticket.priority.name}`),
-            Cell.normal(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`));
+            new Cell(`Feature #${ticket.id}`, settings.topLeftFormatting),
+            new Cell(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`, settings.topRightFormatting),
+            new Cell(`Priorität ${ticket.priority.name}`, settings.bottomLeftFormatting),
+            new Cell(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`, settings.bottomRightFormatting));
     }
 
     private async convertKarte(ticket: Ticket): Promise<Row> {

@@ -9,4 +9,9 @@ export class UrlUtils {
         return regex.test(this.getCurrentUrl());
     }
 
+    public getLastUrlSegment(): string {
+        const url = this.getCurrentUrl();
+        return url.substr(url.lastIndexOf('/') + 1);
+    }
+
 }

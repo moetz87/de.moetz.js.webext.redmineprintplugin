@@ -10,7 +10,8 @@ import { UrlUtils } from '../shared/utils/url-utils';
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte"))';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature"))';
 const SELECTOR_TR_SELECTED = 'tr.context-menu-selection';
-const URL_PATTERN = '.*(\\/projects).*(\\/issues).*';
+const URL_PATTERN_OVERVIEW = '.*(\\/projects).*(\\/issues).*';
+const URL_PATTERN_DETAILEDVIEW = '.*(\\/issues).*';
 
 class Main extends AbstractMain {
 
@@ -21,33 +22,41 @@ class Main extends AbstractMain {
     }
 
     public async onExecuteMain() {
-        if (!this.urlUtils.currentUrlMatchesRegex(URL_PATTERN)) {
-            console.log(`URL ${this.urlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN}.`);
-            console.log('Not including print-buttons.');
-            return;
-        } else {
-            console.log(`URL ${this.urlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN}.`);
+        if (this.urlUtils.currentUrlMatchesRegex(URL_PATTERN_OVERVIEW)) {
+            console.log(`URL ${this.urlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_OVERVIEW}.`);
             console.log('Including print-buttons.');
+            this.addButtonsOnOverview();
+        } else if (this.urlUtils.currentUrlMatchesRegex(URL_PATTERN_DETAILEDVIEW)) {
+            console.log(`URL ${this.urlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
+            console.log('Including print-buttons.');
+            this.addButtonsOnDetailedView();
+        } else {
+            console.log(`URL ${this.urlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_OVERVIEW}.`);
+            console.log(`URL ${this.urlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
+            console.log('Not including print-buttons.');
         }
 
+    }
+
+    private async addButtonsOnOverview() {
         // append header
         const header = jquery('<h3>Drucken</h3>');
         jquery('#sidebar').append(header);
-        // append print all tickets
-        const allTicketsIds = () => this.findIds(SELECTOR_TR_KARTE);
+        // append 'print all tickets'
+        const allTicketsIds = () => this.findIdsInOverview(SELECTOR_TR_KARTE);
         const printAllTicketsBtn = this.createPrintButton('Alle Karten', allTicketsIds);
         jquery('#sidebar').append(printAllTicketsBtn);
-        // append print all features
-        const allFeatureIds = () => this.findIds(SELECTOR_TR_FEATURE);
+        // append 'print all features'
+        const allFeatureIds = () => this.findIdsInOverview(SELECTOR_TR_FEATURE);
         const printAllFeaturesBtn = this.createPrintButton('Alle Features', allFeatureIds);
         jquery('#sidebar').append(printAllFeaturesBtn);
-        // append print selected
-        const allSelectedIds = () => this.findIds(SELECTOR_TR_SELECTED);
+        // append 'print selected'
+        const allSelectedIds = () => this.findIdsInOverview(SELECTOR_TR_SELECTED);
         const printAllSelectedBtn = this.createPrintButton('Ausgewählte', allSelectedIds);
         jquery('#sidebar').append(printAllSelectedBtn);
     }
 
-    private findIds(selector: string): number[] {
+    private findIdsInOverview(selector: string): number[] {
         const ids: number[] = [];
         jquery(selector).find('td.id > a').each((i, e) => {
             const a = jquery(e);
@@ -55,6 +64,16 @@ class Main extends AbstractMain {
             ids.push(id);
         });
         return ids;
+    }
+
+    private async addButtonsOnDetailedView() {
+        // append header
+        const header = jquery('<h3>Drucken</h3>');
+        jquery('#sidebar').append(header);
+        // append 'print showed'
+        const ticketId = () => [ Number(this.urlUtils.getLastUrlSegment()) ];
+        const printAllSelectedBtn = this.createPrintButton('Drucken', ticketId);
+        jquery('#sidebar').append(printAllSelectedBtn);
     }
 
     private createPrintButton(caption: string, ids: () => number[]): HTMLAnchorElement {
