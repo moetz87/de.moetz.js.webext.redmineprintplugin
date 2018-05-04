@@ -1,14 +1,19 @@
+import { Formatting } from './formatting';
 
 export class Settings {
 
-    public url = 'http://localhost:80';
+    constructor(
+        public url = 'http://localhost:80',
+        public topLeftFormatting = new Formatting(),
+        public topRightFormatting = new Formatting(),
+        public centerFormatting = new Formatting(),
+        public bottomLeftFormatting = new Formatting(),
+        public bottomRightFormatting = new Formatting()) {
 
-    constructor(json: any) {
-        return Object.assign(this, json);
     }
 
-    public toJson(): string {
-        return JSON.stringify(this);
+    public static fromJson(json: any): Settings {
+        return Object.assign(new Settings(), json);
     }
 
 }

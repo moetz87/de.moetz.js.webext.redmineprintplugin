@@ -8,7 +8,7 @@ html {
 
 html,
 body {
-    font-size: 13pt;
+    font-size: 12pt;
     background-color: #F9F9FA;
 }
 
@@ -22,71 +22,105 @@ input {
     width: calc(100% - 2px);
     border: 1px solid lightgrey;
     padding: 20px;
+    margin-bottom: 25px;
 }
+
+.content.last {
+    margin-bottom: 0px !important;
+}
+
+.titleheader {
+    font-weight: bold;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-item {
+    flex-grow: 1;
+}
+
+.flex-item.left {
+    text-align: left;
+}
+
+.flex-item.center {
+    text-align: center;
+}
+
+.flex-item.right {
+    text-align: right;
+}
+
+
 
 /**************************/
 /* Messager */
 /**************************/
 
-#messagerOverlay {
+#messager {
     position: fixed;
     display: none;
-    width: calc(100% - 2px);
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
-    border-radius: 5px;
-    background-color: rgba(146, 252, 160, 0.2);
+    padding: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    background-color: rgb(146, 252, 160);
     border: 1px solid rgb(90, 175, 100);
 }
 
-#messagerOverlay .error {
-    background-color: rgba(252, 146, 146, 0.2);
+#messager.error {
+    background-color: rgba(252, 146, 146);
     border: 1px solid rgb(192, 63, 95);
 }
 
-#messager {
-    position: fixed;
-    width: calc(100% - 4px);
-    padding: 10px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    text-align: center;
-    z-index: 3;
-    background-color: rgb(146, 252, 160);
-    border-bottom: 1px solid rgb(90, 175, 100);
-}
-
-#messager .error {
-    background-color: rgb(252, 146, 146);
-    border-bottom: 1px solid rgb(192, 63, 95);
-}
-
 /**************************/
-/* Settings */
+/* General Settings */
 /**************************/
 
-#settings .entry {
+#generalsettings .entry {
     width: 100%;
     display: inline-block;
     margin-top: 20px;
 }
 
-#settings .entry.first {
+#generalsettings .entry.first {
     margin-top: 0px;
 }
 
-#settings .entry .key {
+#generalsettings .entry .key {
     padding-bottom: 5px;
 }
 
-#settings .entry .value {
+#generalsettings .entry .value {
     width: 100%;
 }
 
-#settings .entry .value input {
+#generalsettings .entry .value input {
     width: 100%;
+}
+
+/**************************/
+/* Print-Settings */
+/**************************/
+
+#printsettings #ticketbackground {
+    background-color: #df767f;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+#printsettings label {
+    margin-right: 5px;
+}
+
+#printsettings input[type=number] {
+    width: 75px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(0, 0, 0, 0.5);
+}
+
+#printsettings .center {
+    margin: 20px 0 20px 0;
 }

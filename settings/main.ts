@@ -16,13 +16,12 @@ export class Main extends AbstractMain {
     }
 
     private registerEventHandler() {
-        this.ui.urlField.onchange
-            = () => {
-                const settings = this.ui.getSettings();
-                this.settingsLoader.save(settings)
-                    .then(() => this.ui.showMessage('Einstellungen erfolgreich gespeichert.'))
-                    .catch(error => this.ui.showErrorMessage(`Fehler beim Speichern von Einstellungen: ${error}.`));
-            };
+        this.ui.registerOnChangeListener(() => {
+            const settings = this.ui.getSettings();
+            this.settingsLoader.save(settings)
+                .then(() => this.ui.showMessage('Einstellungen erfolgreich gespeichert.'))
+                .catch(error => this.ui.showErrorMessage(`Fehler beim Speichern von Einstellungen: ${error}.`));
+        });
     }
 
 }

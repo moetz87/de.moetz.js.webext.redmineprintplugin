@@ -73,7 +73,9 @@ new Main(
         new RedmineRequester(
             new SettingsLoader()
         ),
-        new TicketToRowConverter(),
+        new TicketToRowConverter(
+            new SettingsLoader()
+        ),
         new PdfCreator()
     ),
     new UrlUtils()
