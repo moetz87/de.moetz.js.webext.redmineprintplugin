@@ -3,7 +3,7 @@ import { Formatting } from './formatting';
 export class Settings {
 
     constructor(
-        public url = 'http://localhost:80',
+        public url = 'http://redmine/redmine',
         public topLeftFormatting = new Formatting(),
         public topRightFormatting = new Formatting(),
         public centerFormatting = new Formatting(),

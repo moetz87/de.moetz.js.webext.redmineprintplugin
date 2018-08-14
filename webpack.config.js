@@ -1,18 +1,29 @@
+var settings = [
+    { src: 'settings/main.ts', dst: 'settings/main.js', target: 'web' },
+    { src: 'content-scripts/printbuttons.ts', dst: 'content-scripts/printbuttons.js', target: 'web' }
+];
+
+
+
 /*******************************
  * PREPARE CONFIG
  *******************************/
-
 var config = {
     context: __dirname,
-    target: 'web',
     node: {
-        fs: 'empty'
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        __dirname: true,
+        __filename: true
     },
     module: {
-        rules: [{
-            use: 'ts-loader',
-            exclude: /node_modules/
-        }]
+        rules: [
+            {
+                test: /\.ts/,
+                use: 'ts-loader'
+            }
+        ]
     },
     resolve: {
         extensions: ['.ts', '.js'],
@@ -20,34 +31,20 @@ var config = {
     }
 };
 
-class Setting {
-    constructor(entry, output_path, output_name) {
-        this.entry = entry;
-        this.output_path = output_path;
-        this.output_name = output_name;
-    };
-}
-
-var settings = [
-    new Setting('settings/main.ts', 'settings', 'index.js'),
-    new Setting('content-scripts/printbuttons.ts', 'content-scripts', 'printbuttons.js')
-];
-
-
-
-
-
 /*******************************
  * CREATE CONFIG
  *******************************/
+var webpack = require('webpack');
+var path = require('path');
 
 function mapToConfigObject(setting) {
     var object = {
-        entry: `${__dirname}/${setting.entry}`,
+        entry: `${__dirname}/${setting.src}`,
         output: {
-            path: `${__dirname}/${setting.output_path}`,
-            filename: setting.output_name
-        }
+            path: `${__dirname}/${path.dirname(setting.dst)}`,
+            filename: path.basename(setting.dst)
+        },
+        target: setting.target
     };
     return Object.assign({}, config, object);
 }
