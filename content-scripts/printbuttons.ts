@@ -6,9 +6,9 @@ import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
 
-const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte"))';
-const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature"))';
-const SELECTOR_TR_SELECTED = 'tr.context-menu-selection';
+const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte")) > td.id > a';
+const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature")) > td.id > a';
+const SELECTOR_TR_SELECTED = 'tr.context-menu-selection  > td.id > a';
 const URL_PATTERN_OVERVIEW = '.*(\\/projects).*(\\/issues).*';
 const URL_PATTERN_DETAILEDVIEW = '.*(\\/issues).*';
 
@@ -57,14 +57,7 @@ class Main extends WebextMain {
     }
 
     private findIdsInOverview(selector: string): number[] {
-        const ids: number[] = [];
-        // TODO
-        // HtmlUtils.find(selector).find('td.id > a').each((i, e) => {
-        //     const a = jquery(e);
-        //     const id = parseInt(a.text(), 10);
-        //     ids.push(id);
-        // });
-        return ids;
+        return HtmlUtils.find<HTMLAnchorElement>(selector).map(e => parseInt(e.text, 10));
     }
 
     private async addButtonsOnDetailedView() {

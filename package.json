@@ -23,7 +23,7 @@
         "tslint-microsoft-contrib": "5.0.1",
         "ts-loader": "4.3.1",
         "typescript": "2.8.3",
-        "web-ext": "2.2.2",
+        "web-ext": "2.8.0",
         "webpack": "4.10.2",
         "webpack-cli": "3.0.2"
     }
