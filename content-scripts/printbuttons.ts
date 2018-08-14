@@ -1,5 +1,5 @@
-import * as jquery from 'jquery';
-import { AbstractMain } from '../shared/abstract-main';
+import { HtmlUtils } from 'ts-common/html-utils';
+import { WebextMain } from 'ts-common/webext-main';
 import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
@@ -13,7 +13,7 @@ const SELECTOR_TR_SELECTED = 'tr.context-menu-selection';
 const URL_PATTERN_OVERVIEW = '.*(\\/projects).*(\\/issues).*';
 const URL_PATTERN_DETAILEDVIEW = '.*(\\/issues).*';
 
-class Main extends AbstractMain {
+class Main extends WebextMain {
 
     constructor(
         private ticketPrinter: TicketPrinter,
@@ -39,41 +39,46 @@ class Main extends AbstractMain {
     }
 
     private async addButtonsOnOverview() {
+        const sidebar = HtmlUtils.findFirst<HTMLDivElement>('#sidebar');
         // append header
-        const header = jquery('<h3>Drucken</h3>');
-        jquery('#sidebar').append(header);
+        const header = document.createElement('h3');
+        header.innerText = 'Drucken';
+        sidebar.appendChild(header);
         // append 'print all tickets'
         const allTicketsIds = () => this.findIdsInOverview(SELECTOR_TR_KARTE);
         const printAllTicketsBtn = this.createPrintButton('Alle Karten', allTicketsIds);
-        jquery('#sidebar').append(printAllTicketsBtn);
+        sidebar.appendChild(printAllTicketsBtn);
         // append 'print all features'
         const allFeatureIds = () => this.findIdsInOverview(SELECTOR_TR_FEATURE);
         const printAllFeaturesBtn = this.createPrintButton('Alle Features', allFeatureIds);
-        jquery('#sidebar').append(printAllFeaturesBtn);
+        sidebar.appendChild(printAllFeaturesBtn);
         // append 'print selected'
         const allSelectedIds = () => this.findIdsInOverview(SELECTOR_TR_SELECTED);
         const printAllSelectedBtn = this.createPrintButton('Ausgewählte', allSelectedIds);
-        jquery('#sidebar').append(printAllSelectedBtn);
+        sidebar.appendChild(printAllSelectedBtn);
     }
 
     private findIdsInOverview(selector: string): number[] {
         const ids: number[] = [];
-        jquery(selector).find('td.id > a').each((i, e) => {
-            const a = jquery(e);
-            const id = parseInt(a.text(), 10);
-            ids.push(id);
-        });
+        // TODO
+        // HtmlUtils.find(selector).find('td.id > a').each((i, e) => {
+        //     const a = jquery(e);
+        //     const id = parseInt(a.text(), 10);
+        //     ids.push(id);
+        // });
         return ids;
     }
 
     private async addButtonsOnDetailedView() {
+        const sidebar = HtmlUtils.findFirst<HTMLDivElement>('#sidebar');
         // append header
-        const header = jquery('<h3>Drucken</h3>');
-        jquery('#sidebar').append(header);
+        const header = document.createElement('h3');
+        header.innerText = 'Drucken';
+        sidebar.appendChild(header);
         // append 'print showed'
         const ticketId = () => [ Number(this.urlUtils.getLastUrlSegment()) ];
         const printAllSelectedBtn = this.createPrintButton('Drucken', ticketId);
-        jquery('#sidebar').append(printAllSelectedBtn);
+        sidebar.appendChild(printAllSelectedBtn);
     }
 
     private createPrintButton(caption: string, ids: () => number[]): HTMLAnchorElement {

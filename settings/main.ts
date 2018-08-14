@@ -1,8 +1,8 @@
-import { AbstractMain } from '../shared/abstract-main';
+import { WebextMain } from 'ts-common/webext-main';
 import { SettingsLoader } from '../shared/utils/settings-loader';
 import { UserInterface } from './user-interface';
 
-export class Main extends AbstractMain {
+export class Main extends WebextMain {
 
     constructor(
         readonly ui: UserInterface,

@@ -1,4 +1,4 @@
-import * as jQuery from 'jquery';
+import { HtmlUtils } from 'ts-common/html-utils';
 import { Document } from '../shared/model/document';
 import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
@@ -67,7 +67,7 @@ export class TicketPrinter {
         closebtn.textContent = 'Schließen';
         closebtn.style.height = '30px';
         closebtn.style.margin = '5px 10px 5px 10px';
-        closebtn.onclick = () => jQuery('#printingoverlay').remove();
+        closebtn.onclick = () => HtmlUtils.remove('#printingoverlay');
 
         overlay.appendChild(closebtn);
         overlay.appendChild(iframe);
