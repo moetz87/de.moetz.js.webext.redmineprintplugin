@@ -1,24 +1,24 @@
+import { SettingsLoader } from 'ts-common/settings-loader';
 import { WebextMain } from 'ts-common/webext-main';
-import { SettingsLoader } from '../shared/utils/settings-loader';
+import { Settings } from '../shared/model/settings';
 import { UserInterface } from './user-interface';
 
 export class Main extends WebextMain {
 
     constructor(
-        readonly ui: UserInterface,
-        readonly settingsLoader: SettingsLoader) {
+        readonly ui: UserInterface) {
         super();
     }
 
     public onExecuteMain() {
         this.registerEventHandler();
-        this.settingsLoader.load().then(this.ui.setSettings);
+        SettingsLoader.load(Settings).then(this.ui.setSettings);
     }
 
     private registerEventHandler() {
         this.ui.registerOnChangeListener(() => {
             const settings = this.ui.getSettings();
-            this.settingsLoader.save(settings)
+            SettingsLoader.save(settings)
                 .then(() => this.ui.showMessage('Einstellungen erfolgreich gespeichert.'))
                 .catch(error => this.ui.showErrorMessage(`Fehler beim Speichern von Einstellungen: ${error}.`));
         });
@@ -27,6 +27,5 @@ export class Main extends WebextMain {
 }
 
 new Main(
-    new UserInterface(),
-    new SettingsLoader()
+    new UserInterface()
 ).main();

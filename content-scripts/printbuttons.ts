@@ -4,7 +4,6 @@ import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
-import { SettingsLoader } from '../shared/utils/settings-loader';
 import { UrlUtils } from '../shared/utils/url-utils';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte"))';
@@ -76,7 +75,7 @@ class Main extends WebextMain {
         header.innerText = 'Drucken';
         sidebar.appendChild(header);
         // append 'print showed'
-        const ticketId = () => [ Number(this.urlUtils.getLastUrlSegment()) ];
+        const ticketId = () => [Number(this.urlUtils.getLastUrlSegment())];
         const printAllSelectedBtn = this.createPrintButton('Drucken', ticketId);
         sidebar.appendChild(printAllSelectedBtn);
     }
@@ -94,12 +93,8 @@ class Main extends WebextMain {
 
 new Main(
     new TicketPrinter(
-        new RedmineRequester(
-            new SettingsLoader()
-        ),
-        new TicketToRowConverter(
-            new SettingsLoader()
-        ),
+        new RedmineRequester(),
+        new TicketToRowConverter(),
         new PdfCreator()
     ),
     new UrlUtils()

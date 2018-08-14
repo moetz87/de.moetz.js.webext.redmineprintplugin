@@ -1,11 +1,9 @@
+import { SettingsLoader } from 'ts-common/settings-loader';
 import { Cell, Row } from './model/document';
+import { Settings } from './model/settings';
 import { Ticket } from './model/ticket';
-import { SettingsLoader } from './utils/settings-loader';
 
 export class TicketToRowConverter {
-
-    constructor(
-        private settingsLoader: SettingsLoader) { }
 
     public async convert(ticket: Ticket): Promise<Row> {
         console.log(`Ticket has ${ticket.tracker.name} Type`);
@@ -24,7 +22,7 @@ export class TicketToRowConverter {
     }
 
     private async convertFeature(ticket: Ticket): Promise<Row> {
-        const settings = await this.settingsLoader.load();
+        const settings = await SettingsLoader.load(Settings);
         return new Row(
             new Cell(ticket.subject, settings.centerFormatting),
             new Cell(`Feature #${ticket.id}`, settings.topLeftFormatting),
@@ -34,7 +32,7 @@ export class TicketToRowConverter {
     }
 
     private async convertKundenfeedback(ticket: Ticket): Promise<Row> {
-        const settings = await this.settingsLoader.load();
+        const settings = await SettingsLoader.load(Settings);
         return new Row(
             new Cell(ticket.subject, settings.centerFormatting),
             new Cell(`Feature #${ticket.id}`, settings.topLeftFormatting),
@@ -44,7 +42,7 @@ export class TicketToRowConverter {
     }
 
     private async convertKarte(ticket: Ticket): Promise<Row> {
-        const settings = await this.settingsLoader.load();
+        const settings = await SettingsLoader.load(Settings);
         return new Row(
             new Cell(ticket.subject, settings.centerFormatting),
             new Cell(`Karte #${ticket.id}`, settings.topLeftFormatting),
@@ -54,7 +52,7 @@ export class TicketToRowConverter {
     }
 
     private async convertMisc(ticket: Ticket): Promise<Row> {
-        const settings = await this.settingsLoader.load();
+        const settings = await SettingsLoader.load(Settings);
         return new Row(
             new Cell(ticket.subject, settings.centerFormatting),
             new Cell(`Karte #${ticket.id}`, settings.topLeftFormatting),
@@ -64,7 +62,7 @@ export class TicketToRowConverter {
     }
 
     private async convertUnknown(ticket: Ticket): Promise<Row> {
-        const settings = await this.settingsLoader.load();
+        const settings = await SettingsLoader.load(Settings);
         return new Row(
             new Cell(ticket.subject, settings.centerFormatting),
             new Cell(`#${ticket.id}`, settings.topLeftFormatting),
