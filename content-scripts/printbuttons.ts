@@ -1,10 +1,10 @@
 import { HtmlUtils } from 'ts-common/html-utils';
+import { UrlUtils } from 'ts-common/url-utils';
 import { WebextMain } from 'ts-common/webext-main';
 import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
-import { UrlUtils } from '../shared/utils/url-utils';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte"))';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature"))';
@@ -15,23 +15,22 @@ const URL_PATTERN_DETAILEDVIEW = '.*(\\/issues).*';
 class Main extends WebextMain {
 
     constructor(
-        private ticketPrinter: TicketPrinter,
-        private urlUtils: UrlUtils) {
+        private ticketPrinter: TicketPrinter) {
         super();
     }
 
     public async onExecuteMain() {
-        if (this.urlUtils.currentUrlMatchesRegex(URL_PATTERN_OVERVIEW)) {
-            console.log(`URL ${this.urlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_OVERVIEW}.`);
+        if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_OVERVIEW)) {
+            console.log(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_OVERVIEW}.`);
             console.log('Including print-buttons.');
             this.addButtonsOnOverview();
-        } else if (this.urlUtils.currentUrlMatchesRegex(URL_PATTERN_DETAILEDVIEW)) {
-            console.log(`URL ${this.urlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
+        } else if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_DETAILEDVIEW)) {
+            console.log(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
             console.log('Including print-buttons.');
             this.addButtonsOnDetailedView();
         } else {
-            console.log(`URL ${this.urlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_OVERVIEW}.`);
-            console.log(`URL ${this.urlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
+            console.log(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_OVERVIEW}.`);
+            console.log(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
             console.log('Not including print-buttons.');
         }
 
@@ -75,7 +74,7 @@ class Main extends WebextMain {
         header.innerText = 'Drucken';
         sidebar.appendChild(header);
         // append 'print showed'
-        const ticketId = () => [Number(this.urlUtils.getLastUrlSegment())];
+        const ticketId = () => [Number(UrlUtils.getLastUrlSegment())];
         const printAllSelectedBtn = this.createPrintButton('Drucken', ticketId);
         sidebar.appendChild(printAllSelectedBtn);
     }
@@ -96,6 +95,5 @@ new Main(
         new RedmineRequester(),
         new TicketToRowConverter(),
         new PdfCreator()
-    ),
-    new UrlUtils()
+    )
 ).main();
