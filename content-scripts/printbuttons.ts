@@ -5,6 +5,7 @@ import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+import { Messager } from './messager';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte")) > td.id > a';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature")) > td.id > a';
@@ -70,6 +71,15 @@ class Main extends WebextMain {
         const ticketId = () => [Number(UrlUtils.getLastUrlSegment())];
         const printAllSelectedBtn = this.createPrintButton('Drucken', ticketId);
         sidebar.appendChild(printAllSelectedBtn);
+
+        const btn = document.createElement('a');
+        btn.innerText = 'TEST';
+        btn.style.cursor = 'pointer';
+        btn.onclick = () => {
+            console.log('onClick');
+            Messager.showMessage('Foobar!');
+        };
+        sidebar.appendChild(btn);
     }
 
     private createPrintButton(caption: string, ids: () => number[]): HTMLAnchorElement {
