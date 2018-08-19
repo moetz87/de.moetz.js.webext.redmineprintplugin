@@ -1,3 +1,36 @@
+export class TicketExtended implements Ticket {
+    // tslint:disable:variable-name
+    public readonly status: Status;
+    public readonly project: Project;
+    public readonly category: Category;
+    public readonly author: Author;
+    public readonly subject: string;
+    public readonly created_on: string;
+    public readonly assigned_to: AssignedTo;
+    public readonly start_date: string;
+    public readonly custom_fields: CustomField[];
+    public readonly done_ratio: number;
+    public readonly updated_on: string;
+    public readonly description: string;
+    public readonly parent: Parent;
+    public readonly id: number;
+    public readonly fixed_version: FixedVersion;
+    public readonly priority: Priority;
+    public readonly tracker: Tracker;
+
+    constructor(ticket: Ticket) {
+        Object.assign(this, ticket);
+    }
+
+    public get backlog_nr() { return this.getCustomField('BacklogNr'); }
+    public get komplexitaetspunkte() { return this.getCustomField('Komplexitätspunkte'); }
+
+    private getCustomField(name: string): any {
+        const field = (this.custom_fields && this.custom_fields.find(f => f.name === name));
+        return (field && field.value || null);
+    }
+}
+
 export interface Ticket {
     readonly status: Status;
     readonly project: Project;

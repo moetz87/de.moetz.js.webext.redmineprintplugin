@@ -1,79 +1,91 @@
 import { SettingsLoader } from 'ts-common/settings-loader';
 import { Cell, Row } from './model/document';
 import { Settings } from './model/settings';
-import { Ticket } from './model/ticket';
+import { Ticket, TicketExtended } from './model/ticket';
 
 export class TicketToRowConverter {
 
     public async convert(ticket: Ticket): Promise<Row> {
-        console.log(`Ticket has ${ticket.tracker.name} Type`);
+        const ticketExt = new TicketExtended(ticket);
         switch (ticket.tracker.name) {
             case 'Feature':
-                return this.convertFeature(ticket);
+                return this.convertFeature(ticketExt);
             case 'Kundenfeedback':
-                return this.convertKundenfeedback(ticket);
+                return this.convertKundenfeedback(ticketExt);
             case 'Karte':
-                return this.convertKarte(ticket);
+                return this.convertKarte(ticketExt);
             case 'Misc':
-                return this.convertMisc(ticket);
+                return this.convertMisc(ticketExt);
             default:
-                return this.convertUnknown(ticket);
+                return this.convertUnknown(ticketExt);
         }
     }
 
-    private async convertFeature(ticket: Ticket): Promise<Row> {
+    private async convertFeature(ticket: TicketExtended): Promise<Row> {
         const settings = await SettingsLoader.load(Settings);
         return new Row(
-            new Cell(ticket.subject, settings.centerFormatting),
-            new Cell(`Feature #${ticket.id}`, settings.topLeftFormatting),
-            new Cell(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`, settings.topRightFormatting),
+            new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
+            new Cell(this.getOrBlank(() => `Feature #${ticket.id}`), settings.topLeftFormatting),
+            new Cell(this.getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr}`), settings.topRightFormatting),
             Cell.empty(),
-            new Cell(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`, settings.bottomRightFormatting));
+            new Cell(this.getOrBlank(() => `${ticket.komplexitaetspunkte} KP`), settings.bottomRightFormatting)
+        );
     }
 
-    private async convertKundenfeedback(ticket: Ticket): Promise<Row> {
+    private async convertKundenfeedback(ticket: TicketExtended): Promise<Row> {
         const settings = await SettingsLoader.load(Settings);
         return new Row(
-            new Cell(ticket.subject, settings.centerFormatting),
-            new Cell(`Feature #${ticket.id}`, settings.topLeftFormatting),
-            new Cell(`Backlog-Nr: ${this.getCustomField(ticket, 'BacklogNr')}`, settings.topRightFormatting),
-            new Cell(`Priorität ${ticket.priority.name}`, settings.bottomLeftFormatting),
-            new Cell(`${this.getCustomField(ticket, 'Komplexitätspunkte')} KP`, settings.bottomRightFormatting));
+            new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
+            new Cell(this.getOrBlank(() => `Feature #${ticket.id}`), settings.topLeftFormatting),
+            new Cell(this.getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr}`), settings.topRightFormatting),
+            new Cell(this.getOrBlank(() => `Priorität ${ticket.priority.name}`), settings.bottomLeftFormatting),
+            new Cell(this.getOrBlank(() => `${ticket.komplexitaetspunkte} KP`), settings.bottomRightFormatting)
+        );
     }
 
-    private async convertKarte(ticket: Ticket): Promise<Row> {
+    private async convertKarte(ticket: TicketExtended): Promise<Row> {
         const settings = await SettingsLoader.load(Settings);
         return new Row(
-            new Cell(ticket.subject, settings.centerFormatting),
-            new Cell(`Karte #${ticket.id}`, settings.topLeftFormatting),
+            new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
+            new Cell(this.getOrBlank(() => `Karte #${ticket.id}`), settings.topLeftFormatting),
             Cell.empty(),
-            new Cell(`Priorität ${ticket.priority.name}`, settings.bottomLeftFormatting),
-            new Cell(`Feature #${ticket.parent.id}`, settings.bottomRightFormatting));
+            new Cell(this.getOrBlank(() => `Priorität ${ticket.priority.name}`), settings.bottomLeftFormatting),
+            new Cell(this.getOrBlank(() => `Feature #${ticket.parent.id}`), settings.bottomRightFormatting)
+        );
     }
 
-    private async convertMisc(ticket: Ticket): Promise<Row> {
+    private async convertMisc(ticket: TicketExtended): Promise<Row> {
         const settings = await SettingsLoader.load(Settings);
         return new Row(
-            new Cell(ticket.subject, settings.centerFormatting),
-            new Cell(`Karte #${ticket.id}`, settings.topLeftFormatting),
+            new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
+            new Cell(this.getOrBlank(() => `Karte #${ticket.id}`), settings.topLeftFormatting),
             Cell.empty(),
-            new Cell(`Priorität ${ticket.priority.name}`, settings.bottomLeftFormatting),
-            Cell.empty());
+            new Cell(this.getOrBlank(() => `Priorität ${ticket.priority.name}`), settings.bottomLeftFormatting),
+            Cell.empty()
+        );
     }
 
-    private async convertUnknown(ticket: Ticket): Promise<Row> {
+    private async convertUnknown(ticket: TicketExtended): Promise<Row> {
         const settings = await SettingsLoader.load(Settings);
         return new Row(
-            new Cell(ticket.subject, settings.centerFormatting),
-            new Cell(`#${ticket.id}`, settings.topLeftFormatting),
-            new Cell(`Tracker: ${ticket.tracker.name}`, settings.bottomLeftFormatting),
+            new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
+            new Cell(this.getOrBlank(() => `#${ticket.id}`), settings.topLeftFormatting),
+            new Cell(this.getOrBlank(() => `Tracker: ${ticket.tracker.name}`), settings.bottomLeftFormatting),
             Cell.empty(),
-            Cell.empty());
+            Cell.empty()
+        );
     }
 
-    private getCustomField(ticket: Ticket, fieldname: string): any {
-        const backlogNrField = ticket.custom_fields.find(field => field.name === fieldname);
-        return (backlogNrField != null) ? backlogNrField.value : '';
+    private getOrElse(val: () => any, alternative: any): any {
+        try {
+            return val();
+        } catch (e) {
+            return alternative;
+        }
+    }
+
+    private getOrBlank(val: () => any): any {
+        return this.getOrElse(val, '');
     }
 
 }

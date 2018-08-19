@@ -22,6 +22,10 @@ export module Messager {
         HtmlUtils.findFirst('body').appendChild(messager);
     }
 
+    export function showError(message: string) {
+        showMessage('Fehler!', message);
+    }
+
     function createHeader(title: string): HTMLDivElement {
         const header = document.createElement('div');
         Object.assign(header.style, {

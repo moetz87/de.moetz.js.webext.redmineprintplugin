@@ -43,13 +43,13 @@ export class PdfCreator {
         const rowOnPage = (rowNumber % doc.rowsPerPage) + 1;
         if (rowOnPage === doc.rowsPerPage) {
             if (rowNumber + 1 !== doc.rows.length) {
-                console.log('page is full. add page.');
+                console.debug('page is full. add page.');
                 pdf.addPage();
             } else {
-                console.log('page if full, but last row. not adding page.');
+                console.debug('page if full, but last row. not adding page.');
             }
         } else {
-            console.log('page is not full. draw line.');
+            console.debug('page is not full. draw line.');
             const y = (doc.height / doc.rowsPerPage) * rowOnPage;
             pdf.line(0, y, doc.width, y);
         }

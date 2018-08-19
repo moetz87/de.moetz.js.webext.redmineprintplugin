@@ -5,7 +5,6 @@ import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
-import { Messager } from './messager';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte")) > td.id > a';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature")) > td.id > a';
@@ -22,17 +21,17 @@ class Main extends WebextMain {
 
     public async onExecuteMain() {
         if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_OVERVIEW)) {
-            console.log(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_OVERVIEW}.`);
-            console.log('Including print-buttons.');
+            console.debug(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_OVERVIEW}.`);
+            console.debug('Including print-buttons.');
             this.addButtonsOnOverview();
         } else if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_DETAILEDVIEW)) {
-            console.log(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
-            console.log('Including print-buttons.');
+            console.debug(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
+            console.debug('Including print-buttons.');
             this.addButtonsOnDetailedView();
         } else {
-            console.log(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_OVERVIEW}.`);
-            console.log(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
-            console.log('Not including print-buttons.');
+            console.debug(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_OVERVIEW}.`);
+            console.debug(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
+            console.debug('Not including print-buttons.');
         }
 
     }
@@ -71,15 +70,6 @@ class Main extends WebextMain {
         const ticketId = () => [Number(UrlUtils.getLastUrlSegment())];
         const printAllSelectedBtn = this.createPrintButton('Drucken', ticketId);
         sidebar.appendChild(printAllSelectedBtn);
-
-        const btn = document.createElement('a');
-        btn.innerText = 'TEST';
-        btn.style.cursor = 'pointer';
-        btn.onclick = () => {
-            console.log('onClick');
-            Messager.showMessage('Foobar!', 'Some Error occured.');
-        };
-        sidebar.appendChild(btn);
     }
 
     private createPrintButton(caption: string, ids: () => number[]): HTMLAnchorElement {
