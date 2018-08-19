@@ -44,7 +44,10 @@ function mapToConfigObject(setting) {
             path: `${__dirname}/${path.dirname(setting.dst)}`,
             filename: path.basename(setting.dst)
         },
-        target: setting.target
+        target: setting.target,
+        watchOptions: {
+            poll: true
+        }
     };
     return Object.assign({}, config, object);
 }

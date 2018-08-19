@@ -43,14 +43,14 @@ class Main extends WebextMain {
         const header = document.createElement('h3');
         header.innerText = 'Drucken';
         sidebar.appendChild(header);
-        // append 'print all tickets'
-        const allTicketsIds = () => this.findIdsInOverview(SELECTOR_TR_KARTE);
-        const printAllTicketsBtn = this.createPrintButton('Alle Karten', allTicketsIds);
-        sidebar.appendChild(printAllTicketsBtn);
         // append 'print all features'
         const allFeatureIds = () => this.findIdsInOverview(SELECTOR_TR_FEATURE);
         const printAllFeaturesBtn = this.createPrintButton('Alle Features', allFeatureIds);
         sidebar.appendChild(printAllFeaturesBtn);
+        // append 'print all tickets'
+        const allTicketsIds = () => this.findIdsInOverview(SELECTOR_TR_KARTE);
+        const printAllTicketsBtn = this.createPrintButton('Alle Karten', allTicketsIds);
+        sidebar.appendChild(printAllTicketsBtn);
         // append 'print selected'
         const allSelectedIds = () => this.findIdsInOverview(SELECTOR_TR_SELECTED);
         const printAllSelectedBtn = this.createPrintButton('Ausgewählte', allSelectedIds);
@@ -77,7 +77,7 @@ class Main extends WebextMain {
         btn.style.cursor = 'pointer';
         btn.onclick = () => {
             console.log('onClick');
-            Messager.showMessage('Foobar!');
+            Messager.showMessage('Foobar!', 'Some Error occured.');
         };
         sidebar.appendChild(btn);
     }
