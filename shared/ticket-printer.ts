@@ -26,6 +26,7 @@ export class TicketPrinter {
     }
 
     private async loadTickets(ids: number[]): Promise<Ticket[]> {
+        console.debug(`Lade Tickets: ${ids}`);
         const promises: Promise<Ticket>[] = [];
         ids.forEach(id => promises.push(this.redmineRequester.getTicket(id)));
         return Promise.all(promises);

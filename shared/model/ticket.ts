@@ -27,7 +27,7 @@ export class TicketExtended implements Ticket {
 
     private getCustomField(name: string): any {
         const field = (this.custom_fields && this.custom_fields.find(f => f.name === name));
-        return (field && field.value || null);
+        return (field && field.value || undefined);
     }
 }
 

@@ -26,9 +26,9 @@ export class TicketToRowConverter {
         return new Row(
             new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
             new Cell(this.getOrBlank(() => `Feature #${ticket.id}`), settings.topLeftFormatting),
-            new Cell(this.getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr}`), settings.topRightFormatting),
+            new Cell(this.getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr || '-'}`), settings.topRightFormatting),
             Cell.empty(),
-            new Cell(this.getOrBlank(() => `${ticket.komplexitaetspunkte} KP`), settings.bottomRightFormatting)
+            new Cell(this.getOrBlank(() => `${ticket.komplexitaetspunkte || '-'} KP`), settings.bottomRightFormatting)
         );
     }
 
@@ -37,9 +37,9 @@ export class TicketToRowConverter {
         return new Row(
             new Cell(this.getOrBlank(() => ticket.subject), settings.centerFormatting),
             new Cell(this.getOrBlank(() => `Feature #${ticket.id}`), settings.topLeftFormatting),
-            new Cell(this.getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr}`), settings.topRightFormatting),
+            new Cell(this.getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr || '-'}`), settings.topRightFormatting),
             new Cell(this.getOrBlank(() => `Priorität ${ticket.priority.name}`), settings.bottomLeftFormatting),
-            new Cell(this.getOrBlank(() => `${ticket.komplexitaetspunkte} KP`), settings.bottomRightFormatting)
+            new Cell(this.getOrBlank(() => `${ticket.komplexitaetspunkte || '-'} KP`), settings.bottomRightFormatting)
         );
     }
 
@@ -50,7 +50,7 @@ export class TicketToRowConverter {
             new Cell(this.getOrBlank(() => `Karte #${ticket.id}`), settings.topLeftFormatting),
             Cell.empty(),
             new Cell(this.getOrBlank(() => `Priorität ${ticket.priority.name}`), settings.bottomLeftFormatting),
-            new Cell(this.getOrBlank(() => `Feature #${ticket.parent.id}`), settings.bottomRightFormatting)
+            new Cell(this.getOrElse(() => `Feature #${ticket.parent.id}`, 'Kein Feature'), settings.bottomRightFormatting)
         );
     }
 
