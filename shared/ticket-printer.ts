@@ -3,6 +3,7 @@ import { Document } from '../shared/model/document';
 import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+import { Messager } from './messager';
 import { Row } from './model/document';
 import { Ticket } from './model/ticket';
 
@@ -19,6 +20,10 @@ export class TicketPrinter {
         private pdfCreator: PdfCreator) { }
 
     public async printTickets(ids: number[]): Promise<void> {
+        if (ids.length === 0) {
+            Messager.showMessage('Info', 'Keine druckbaren Tickets gewählt.');
+            return Promise.resolve();
+        }
         const tickets = await this.loadTickets(ids);
         const document = await this.createDocument(tickets);
         const objectUrl = this.createPdfAndConvertToObjectUrl(document);

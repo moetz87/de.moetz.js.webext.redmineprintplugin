@@ -8,6 +8,7 @@ import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte")) > td.id > a';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature")) > td.id > a';
+const SELECTOR_TR_KUNDENFEEDBACK = 'tr:has(td.tracker:contains("Kundenfeedback")) > td.id > a';
 const SELECTOR_TR_SELECTED = 'tr.context-menu-selection  > td.id > a';
 const URL_PATTERN_OVERVIEW = '.*(\\/projects).*(\\/issues).*';
 const URL_PATTERN_DETAILEDVIEW = '.*(\\/issues).*';
@@ -46,6 +47,10 @@ class Main extends WebextMain {
         const allFeatureIds = () => this.findIdsInOverview(SELECTOR_TR_FEATURE);
         const printAllFeaturesBtn = this.createPrintButton('Alle Features', allFeatureIds);
         sidebar.appendChild(printAllFeaturesBtn);
+        // append 'print all kundenfeedbacks'
+        const allKundenfeedbackIds = () => this.findIdsInOverview(SELECTOR_TR_KUNDENFEEDBACK);
+        const printAllKundenfeedbacksBtn = this.createPrintButton('Alle Kundenfeedbacks', allKundenfeedbackIds);
+        sidebar.appendChild(printAllKundenfeedbacksBtn);
         // append 'print all tickets'
         const allTicketsIds = () => this.findIdsInOverview(SELECTOR_TR_KARTE);
         const printAllTicketsBtn = this.createPrintButton('Alle Karten', allTicketsIds);
@@ -75,8 +80,10 @@ class Main extends WebextMain {
     private createPrintButton(caption: string, ids: () => number[]): HTMLAnchorElement {
         const button = document.createElement('a');
         button.innerText = caption;
-        button.style.display = 'block';
-        button.style.cursor = 'pointer';
+        Object.assign(button.style, {
+            display: 'block',
+            cursor: 'pointer'
+        });
         button.onclick = () => this.ticketPrinter.printTickets(ids());
         return button;
     }

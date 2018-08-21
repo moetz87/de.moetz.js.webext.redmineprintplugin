@@ -1,5 +1,5 @@
 var settings = [
-    { src: 'settings/main.ts', dst: 'settings/main.js', target: 'web' },
+    { src: 'settings/main.ts', dst: 'settings/index.js', target: 'web' },
     { src: 'content-scripts/printbuttons.ts', dst: 'content-scripts/printbuttons.js', target: 'web' }
 ];
 

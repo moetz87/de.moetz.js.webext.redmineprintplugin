@@ -53,12 +53,29 @@ input {
     text-align: right;
 }
 
+#savebutton {
+    font-size: 1.1em;
+    font-weight: normal;
+    text-align: center;
+    width: 125px;
+    height: 32px;
+    margin-top: 30px;
+    background-color: #f9f9fa;
+    border: 1px solid lightgray;
+    border-radius: 2px;
+}
+
+#savebutton:hover {
+    background-color: #f0f0f0
+}
+
 
 
 /**************************/
 /* Messager */
 /**************************/
 
+/*
 #messager {
     position: fixed;
     display: none;
@@ -74,6 +91,7 @@ input {
     background-color: rgba(252, 146, 146);
     border: 1px solid rgb(192, 63, 95);
 }
+*/
 
 /**************************/
 /* General Settings */

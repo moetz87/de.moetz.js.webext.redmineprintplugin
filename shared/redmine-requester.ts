@@ -16,8 +16,8 @@ export class RedmineRequester {
             const req = new XMLHttpRequest();
             req.timeout = TIMEOUT_IN_MS;
             req.onload = () => this.parseAndResolve(req, resolve);
-            req.onerror = () => this.showErrorAndReject(`(OnError) Fehler beim Laden des Tickets mit der ID ${id}.`, reject);
-            req.ontimeout = () => this.showErrorAndReject(`(OnTimeout) Fehler beim Laden des Tickets mit der ID ${id}.`, reject);
+            req.onerror = () => this.showErrorAndReject(`Fehler beim Laden des Tickets mit der ID ${id}.`, reject);
+            req.ontimeout = () => this.showErrorAndReject(`Timeout beim Laden des Tickets mit der ID ${id}.`, reject);
             req.open('GET', url, true);
             req.send();
         });

@@ -11,17 +11,7 @@ export class Main extends WebextMain {
     }
 
     public onExecuteMain() {
-        this.registerEventHandler();
         SettingsLoader.load(Settings).then(this.ui.setSettings);
-    }
-
-    private registerEventHandler() {
-        this.ui.registerOnChangeListener(() => {
-            const settings = this.ui.getSettings();
-            SettingsLoader.save(settings)
-                .then(() => this.ui.showMessage('Einstellungen erfolgreich gespeichert.'))
-                .catch(error => this.ui.showErrorMessage(`Fehler beim Speichern von Einstellungen: ${error}.`));
-        });
     }
 
 }

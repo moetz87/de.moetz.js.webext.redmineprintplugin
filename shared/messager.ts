@@ -51,23 +51,43 @@ export module Messager {
         'background-color': 'rgba(0, 0, 0, 0.5)'
     };
 
+    const STYLE_BG_LIGHT = 'rgba(0, 0, 0, 0.2)';
+
     export function showMessage(title: string, message: string) {
+        show(title, message);
+    }
+
+    export function showMessageLight(title: string, message: string) {
+        show(title, message, STYLE_BG_LIGHT);
+    }
+
+    export function showError(message: string) {
+        show('Fehler!', message);
+    }
+
+    export function showErrorLight(message: string) {
+        show('Fehler!', STYLE_BG_LIGHT);
+    }
+
+    function show(title: string, message: string, bg?: string) {
         if (isMessageShown()) {
             console.debug('Already showing message. Add to waiting messages.');
             WaitingMessages.addMessage(title, message);
             return;
         }
+
+        const background = createBackground();
+        if (bg) {
+            background.style.backgroundColor = bg;
+        }
+        HtmlUtils.findFirst('body').appendChild(background);
+
         const messager = document.createElement('div');
         messager.id = ID_MESSAGER;
         Object.assign(messager.style, STYLE_MESSAGER_DIV);
         messager.appendChild(createHeader(title));
         messager.appendChild(createBody(message));
-        HtmlUtils.findFirst('body').appendChild(createBackground());
         HtmlUtils.findFirst('body').appendChild(messager);
-    }
-
-    export function showError(message: string) {
-        showMessage('Fehler!', message);
     }
 
     function createHeader(title: string): HTMLDivElement {

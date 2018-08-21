@@ -1,11 +1,13 @@
 import { HtmlUtils } from 'ts-common/html-utils';
+import { Messager } from '../shared/messager';
 import { Formatting } from '../shared/model/formatting';
 import { Settings } from '../shared/model/settings';
+import { SettingsLoader } from 'ts-common/settings-loader';
 
 export class UserInterface {
 
     private readonly urlField = HtmlUtils.findFirst<HTMLInputElement>('#urlField');
-    private readonly topLeftFrontSizeField = HtmlUtils.findFirst<HTMLInputElement>('topleftfontsize');
+    private readonly topLeftFrontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontsize');
     private readonly topLeftFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontbold');
     private readonly topRightFontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#toprightfontsize');
     private readonly topRightFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#toprightfontbold');
@@ -15,21 +17,12 @@ export class UserInterface {
     private readonly bottomLeftFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#bottomleftfontbold');
     private readonly bottomRightFontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#bottomrightfontsize');
     private readonly bottomRightFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#bottomrightfontbold');
-    private readonly messager = <HTMLElement>document.getElementById('messager');
-    private onChangeListener: (() => void)[] = [];
+    private readonly saveButton = HtmlUtils.findFirst<HTMLButtonElement>('#savebutton');
 
     constructor() {
-        this.urlField.onchange = this.onFieldValueChange;
-        this.topLeftFrontSizeField.onchange = this.onFieldValueChange;
-        this.topLeftFontBoldField.onchange = this.onFieldValueChange;
-        this.topRightFontSizeField.onchange = this.onFieldValueChange;
-        this.topRightFontBoldField.onchange = this.onFieldValueChange;
-        this.centerFontSizeField.onchange = this.onFieldValueChange;
-        this.centerFontBoldField.onchange = this.onFieldValueChange;
-        this.bottomLeftFontSizeField.onchange = this.onFieldValueChange;
-        this.bottomLeftFontBoldField.onchange = this.onFieldValueChange;
-        this.bottomRightFontSizeField.onchange = this.onFieldValueChange;
-        this.bottomRightFontBoldField.onchange = this.onFieldValueChange;
+        this.saveButton.onclick = () => SettingsLoader.save(this.getSettings())
+            .then(() => Messager.showMessageLight('Erfolg', 'Einstellungen gespeichert.'))
+            .catch(() => Messager.showErrorLight('Fehler beim Speichern der Einstellungen.'));
     }
 
     public setSettings = (settings: Settings) => {
@@ -77,24 +70,12 @@ export class UserInterface {
         );
     }
 
-    public registerOnChangeListener(callback: () => void) {
-        this.onChangeListener.push(callback);
-    }
-
     public showMessage(message: string) {
-        this.messager.innerText = message;
-        this.messager.className = '';
-        this.messager.style.display = 'block';
-        setTimeout(() => this.messager.style.display = 'none', 2500);
+        Messager.showMessage('Info', message);
     }
 
     public showErrorMessage(message: string) {
-        this.showMessage(message);
-        this.messager.className = 'error';
-    }
-
-    private onFieldValueChange = () => {
-        this.onChangeListener.forEach(callback => callback());
+        Messager.showError(message);
     }
 
 }
