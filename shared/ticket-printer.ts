@@ -1,11 +1,11 @@
 import { HtmlUtils } from 'ts-common/html-utils';
-import { Document } from '../shared/model/document';
 import { PdfCreator } from '../shared/pdf-creator';
 import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+import { Document } from './entities/document';
+import { Row } from './entities/document';
+import { Ticket } from './entities/ticket';
 import { Messager } from './messager';
-import { Row } from './model/document';
-import { Ticket } from './model/ticket';
 
 const ROWS_PER_PAGE = 3;
 const HEIGHT = 841.89;

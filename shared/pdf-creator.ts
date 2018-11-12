@@ -1,5 +1,5 @@
 import * as jsPDF from 'jspdf';
-import { Cell, Document, Row } from './model/document';
+import { Cell, Document, Row } from './entities/document';
 
 export class PdfCreator {
 

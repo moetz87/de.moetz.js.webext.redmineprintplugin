@@ -1,8 +1,8 @@
 import { SettingsLoader } from 'ts-common/settings-loader';
+import { Cell, Row } from './entities/document';
+import { Settings } from './entities/settings';
+import { Ticket, TicketExtended } from './entities/ticket';
 import { Messager } from './messager';
-import { Cell, Row } from './model/document';
-import { Settings } from './model/settings';
-import { Ticket, TicketExtended } from './model/ticket';
 
 export class TicketToRowConverter {
 

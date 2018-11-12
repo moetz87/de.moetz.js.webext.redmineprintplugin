@@ -1,12 +1,13 @@
 import { HtmlUtils } from 'ts-common/html-utils';
 import { SettingsLoader } from 'ts-common/settings-loader';
+import { Formatting } from '../shared/entities/formatting';
+import { Settings } from '../shared/entities/settings';
 import { Messager } from '../shared/messager';
-import { Formatting } from '../shared/model/formatting';
-import { Settings } from '../shared/model/settings';
 
 export class UserInterface {
 
     private readonly urlField = HtmlUtils.findFirst<HTMLInputElement>('#urlField');
+    private readonly tokenField = HtmlUtils.findFirst<HTMLInputElement>('#tokenField');
     private readonly topLeftFrontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontsize');
     private readonly topLeftFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontbold');
     private readonly topRightFontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#toprightfontsize');
@@ -27,6 +28,7 @@ export class UserInterface {
 
     public setSettings = (settings: Settings) => {
         this.urlField.value = settings.url;
+        this.tokenField.value = settings.token || '';
         this.topLeftFrontSizeField.valueAsNumber = settings.topLeftFormatting.fontSize;
         this.topLeftFontBoldField.checked = settings.topLeftFormatting.fontBold;
         this.topRightFontSizeField.valueAsNumber = settings.topRightFormatting.fontSize;
@@ -62,20 +64,13 @@ export class UserInterface {
         );
         return new Settings(
             this.urlField.value,
+            this.tokenField.value,
             topLeftFormatting,
             topRightFormatting,
             centerFormatting,
             bottomLeftFormatting,
             bottomRightFormatting
         );
-    }
-
-    public showMessage(message: string) {
-        Messager.showMessage('Info', message);
-    }
-
-    public showErrorMessage(message: string) {
-        Messager.showMessage('Fehler', message);
     }
 
 }
