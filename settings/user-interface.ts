@@ -1,8 +1,8 @@
 import { HtmlUtils } from 'ts-common/html-utils';
+import { SettingsLoader } from 'ts-common/settings-loader';
 import { Messager } from '../shared/messager';
 import { Formatting } from '../shared/model/formatting';
 import { Settings } from '../shared/model/settings';
-import { SettingsLoader } from 'ts-common/settings-loader';
 
 export class UserInterface {
 
@@ -21,8 +21,8 @@ export class UserInterface {
 
     constructor() {
         this.saveButton.onclick = () => SettingsLoader.save(this.getSettings())
-            .then(() => Messager.showMessageLight('Erfolg', 'Einstellungen gespeichert.'))
-            .catch(() => Messager.showErrorLight('Fehler beim Speichern der Einstellungen.'));
+            .then(() => Messager.showMessage('Erfolg', 'Einstellungen gespeichert.'))
+            .catch(() => Messager.showMessage('Fehler', 'Fehler beim Speichern der Einstellungen.'));
     }
 
     public setSettings = (settings: Settings) => {
@@ -75,7 +75,7 @@ export class UserInterface {
     }
 
     public showErrorMessage(message: string) {
-        Messager.showError(message);
+        Messager.showMessage('Fehler', message);
     }
 
 }

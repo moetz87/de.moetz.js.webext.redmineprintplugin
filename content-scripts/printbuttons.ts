@@ -22,19 +22,10 @@ class Main extends WebextMain {
 
     public async onExecuteMain() {
         if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_OVERVIEW)) {
-            console.debug(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_OVERVIEW}.`);
-            console.debug('Including print-buttons.');
             this.addButtonsOnOverview();
         } else if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_DETAILEDVIEW)) {
-            console.debug(`URL ${UrlUtils.getCurrentUrl()} matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
-            console.debug('Including print-buttons.');
             this.addButtonsOnDetailedView();
-        } else {
-            console.debug(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_OVERVIEW}.`);
-            console.debug(`URL ${UrlUtils.getCurrentUrl()} not matching pattern ${URL_PATTERN_DETAILEDVIEW}.`);
-            console.debug('Not including print-buttons.');
         }
-
     }
 
     private async addButtonsOnOverview() {

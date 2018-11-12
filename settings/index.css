@@ -72,28 +72,6 @@ input {
 
 
 /**************************/
-/* Messager */
-/**************************/
-
-/*
-#messager {
-    position: fixed;
-    display: none;
-    padding: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    background-color: rgb(146, 252, 160);
-    border: 1px solid rgb(90, 175, 100);
-}
-
-#messager.error {
-    background-color: rgba(252, 146, 146);
-    border: 1px solid rgb(192, 63, 95);
-}
-*/
-
-/**************************/
 /* General Settings */
 /**************************/
 
