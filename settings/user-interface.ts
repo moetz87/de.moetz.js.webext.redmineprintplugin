@@ -8,6 +8,7 @@ export class UserInterface {
 
     private readonly urlField = HtmlUtils.findFirst<HTMLInputElement>('#urlField');
     private readonly tokenField = HtmlUtils.findFirst<HTMLInputElement>('#tokenField');
+    private readonly tokenLink = HtmlUtils.findFirst<HTMLAnchorElement>('#tokenLink');
     private readonly topLeftFrontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontsize');
     private readonly topLeftFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontbold');
     private readonly topRightFontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#toprightfontsize');
@@ -29,6 +30,7 @@ export class UserInterface {
     public setSettings = (settings: Settings) => {
         this.urlField.value = settings.url;
         this.tokenField.value = settings.token || '';
+        this.tokenLink.href = `${settings.url}/my/api_key`;
         this.topLeftFrontSizeField.valueAsNumber = settings.topLeftFormatting.fontSize;
         this.topLeftFontBoldField.checked = settings.topLeftFormatting.fontBold;
         this.topRightFontSizeField.valueAsNumber = settings.topRightFormatting.fontSize;
