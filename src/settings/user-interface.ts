@@ -21,10 +21,13 @@ export class UserInterface {
     private readonly bottomRightFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#bottomrightfontbold');
     private readonly saveButton = HtmlUtils.findFirst<HTMLButtonElement>('#savebutton');
 
+
     constructor() {
         this.saveButton.onclick = () => SettingsLoader.save(this.getSettings())
             .then(() => Messager.showMessage('Erfolg', 'Einstellungen gespeichert.'))
             .catch(() => Messager.showMessage('Fehler', 'Fehler beim Speichern der Einstellungen.'));
+
+        this.urlField.oninput = () => this.tokenLink.href = `${this.urlField.value}/my/api_key`;
     }
 
     public setSettings = (settings: Settings) => {

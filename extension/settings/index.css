@@ -3,13 +3,13 @@
 /**************************/
 
 html {
-    min-width: 750px;
+    min-width: 500px;
 }
 
 html,
 body {
     font-size: 12pt;
-    background-color: #F9F9FA;
+    background-color: white;
 }
 
 input {

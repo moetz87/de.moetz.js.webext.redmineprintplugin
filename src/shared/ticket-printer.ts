@@ -10,7 +10,7 @@ import { TicketToRowConverter } from './ticket-to-row-converter';
 const ROWS_PER_PAGE = 3;
 const HEIGHT = 841.89;
 const WIDTH = 595.28;
-const MARGIN = 10;
+const MARGIN = 30;
 
 export module TicketPrinter {
 
