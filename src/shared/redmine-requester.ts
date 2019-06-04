@@ -1,4 +1,4 @@
-import { SettingsLoader } from 'ts-common/settings-loader';
+import { SettingsLoader } from '../shared/utils/settings-loader';
 import { Settings } from './entities/settings';
 import { Ticket } from './entities/ticket';
 import { withErrorlogging } from './executor';
@@ -6,9 +6,9 @@ import { Messager } from './messager';
 
 const TIMEOUT_IN_MS = 5000;
 
-export class RedmineRequester {
+export module RedmineRequester {
 
-    public async getTicket(id: number): Promise<Ticket> {
+    export async function getTicket(id: number): Promise<Ticket> {
         const settings = await withErrorlogging('Fehler beim Laden der Einstellungen.', () => SettingsLoader.load(Settings));
         const url = `${settings.url}/issues/${id}.json`;
         return new Promise<Ticket>((resolve, reject) => {
@@ -18,7 +18,7 @@ export class RedmineRequester {
             req.setRequestHeader('X-Redmine-API-Key', settings.token || '');
             req.onreadystatechange = () => {
                 if (req.readyState === XMLHttpRequest.DONE) {
-                    this.handleResponse(id, req, resolve, reject);
+                    handleResponse(id, req, resolve, reject);
                 }
             };
             req.send();
@@ -26,7 +26,7 @@ export class RedmineRequester {
         });
     }
 
-    private handleResponse(id: number, req: XMLHttpRequest, resolve, reject) {
+    function handleResponse(id: number, req: XMLHttpRequest, resolve, reject) {
         if (req.status === 200) {
             const response = JSON.parse(req.response);
             resolve(response.issue);

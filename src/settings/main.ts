@@ -1,17 +1,14 @@
-import { SettingsLoader } from 'ts-common/settings-loader';
-import { WebextMain } from 'ts-common/webext-main';
 import { Settings } from '../shared/entities/settings';
 import { Messager } from '../shared/messager';
+import { Domready } from '../shared/utils/domready-dynamic';
+import { SettingsLoader } from '../shared/utils/settings-loader';
 import { UserInterface } from './user-interface';
 
-export class Main extends WebextMain {
+export class Main {
 
-    constructor(
-        readonly ui: UserInterface) {
-        super();
-    }
+    constructor(readonly ui: UserInterface) { }
 
-    public async onExecuteMain() {
+    public async main() {
         try {
             const settings = await SettingsLoader.load(Settings);
             this.ui.setSettings(settings);
@@ -22,6 +19,7 @@ export class Main extends WebextMain {
 
 }
 
-new Main(
+const main = new Main(
     new UserInterface()
-).main();
+);
+Domready.onReady(async () => main.main());

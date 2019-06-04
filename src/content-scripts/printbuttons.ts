@@ -1,10 +1,7 @@
-import { HtmlUtils } from 'ts-common/html-utils';
-import { UrlUtils } from 'ts-common/url-utils';
-import { WebextMain } from 'ts-common/webext-main';
-import { PdfCreator } from '../shared/pdf-creator';
-import { RedmineRequester } from '../shared/redmine-requester';
 import { TicketPrinter } from '../shared/ticket-printer';
-import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+import { Domready } from '../shared/utils/domready-dynamic';
+import { HtmlUtils } from '../shared/utils/html-utils';
+import { UrlUtils } from '../shared/utils/url-utils';
 
 const SELECTOR_TR_KARTE = 'tr:has(td.tracker:contains("Karte")) > td.id > a';
 const SELECTOR_TR_FEATURE = 'tr:has(td.tracker:contains("Feature")) > td.id > a';
@@ -13,14 +10,9 @@ const SELECTOR_TR_SELECTED = 'tr.context-menu-selection  > td.id > a';
 const URL_PATTERN_OVERVIEW = '.*(\\/projects).*(\\/issues).*';
 const URL_PATTERN_DETAILEDVIEW = '.*(\\/issues).*';
 
-class Main extends WebextMain {
+export class Printbuttons {
 
-    constructor(
-        private ticketPrinter: TicketPrinter) {
-        super();
-    }
-
-    public async onExecuteMain() {
+    public async main() {
         if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_OVERVIEW)) {
             this.addButtonsOnOverview();
         } else if (UrlUtils.currentUrlMatchesRegex(URL_PATTERN_DETAILEDVIEW)) {
@@ -28,7 +20,7 @@ class Main extends WebextMain {
         }
     }
 
-    private async addButtonsOnOverview() {
+    private addButtonsOnOverview() {
         const sidebar = HtmlUtils.findFirst<HTMLDivElement>('#sidebar');
         // append header
         const header = document.createElement('h3');
@@ -56,7 +48,7 @@ class Main extends WebextMain {
         return HtmlUtils.find<HTMLAnchorElement>(selector).map(e => parseInt(e.text, 10));
     }
 
-    private async addButtonsOnDetailedView() {
+    private addButtonsOnDetailedView() {
         const sidebar = HtmlUtils.findFirst<HTMLDivElement>('#sidebar');
         // append header
         const header = document.createElement('h3');
@@ -75,16 +67,10 @@ class Main extends WebextMain {
             display: 'block',
             cursor: 'pointer'
         });
-        button.onclick = () => this.ticketPrinter.printTickets(ids());
+        button.onclick = () => TicketPrinter.printTickets(ids());
         return button;
     }
 
 }
 
-new Main(
-    new TicketPrinter(
-        new RedmineRequester(),
-        new TicketToRowConverter(),
-        new PdfCreator()
-    )
-).main();
+Domready.onReady(async () => new Printbuttons().main());

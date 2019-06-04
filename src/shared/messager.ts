@@ -1,4 +1,3 @@
-
 declare var browser: any;
 
 export module Messager {

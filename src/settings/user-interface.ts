@@ -1,8 +1,8 @@
-import { HtmlUtils } from 'ts-common/html-utils';
-import { SettingsLoader } from 'ts-common/settings-loader';
 import { Formatting } from '../shared/entities/formatting';
 import { Settings } from '../shared/entities/settings';
 import { Messager } from '../shared/messager';
+import { HtmlUtils } from '../shared/utils/html-utils';
+import { SettingsLoader } from '../shared/utils/settings-loader';
 
 export class UserInterface {
 

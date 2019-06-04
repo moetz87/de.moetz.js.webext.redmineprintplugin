@@ -1,55 +1,50 @@
-import { HtmlUtils } from 'ts-common/html-utils';
-import { PdfCreator } from '../shared/pdf-creator';
-import { RedmineRequester } from '../shared/redmine-requester';
-import { TicketToRowConverter } from '../shared/ticket-to-row-converter';
+import { HtmlUtils } from '../shared/utils/html-utils';
 import { Document } from './entities/document';
 import { Row } from './entities/document';
 import { Ticket } from './entities/ticket';
 import { Messager } from './messager';
+import { PdfCreator } from './pdf-creator';
+import { RedmineRequester } from './redmine-requester';
+import { TicketToRowConverter } from './ticket-to-row-converter';
 
 const ROWS_PER_PAGE = 3;
 const HEIGHT = 841.89;
 const WIDTH = 595.28;
 const MARGIN = 10;
 
-export class TicketPrinter {
+export module TicketPrinter {
 
-    constructor(
-        private redmineRequester: RedmineRequester,
-        private ticketToRowConverter: TicketToRowConverter,
-        private pdfCreator: PdfCreator) { }
-
-    public async printTickets(ids: number[]): Promise<void> {
+    export async function printTickets(ids: number[]): Promise<void> {
         if (ids.length === 0) {
             Messager.showMessage('Info', 'Keine druckbaren Tickets gewählt.');
             return Promise.resolve();
         }
-        const tickets = await this.loadTickets(ids);
-        const document = await this.createDocument(tickets);
-        const objectUrl = this.createPdfAndConvertToObjectUrl(document);
-        this.print(objectUrl);
+        const tickets = await loadTickets(ids);
+        const document = await createDocument(tickets);
+        const objectUrl = createPdfAndConvertToObjectUrl(document);
+        print(objectUrl);
     }
 
-    private async loadTickets(ids: number[]): Promise<Ticket[]> {
+    async function loadTickets(ids: number[]): Promise<Ticket[]> {
         const promises: Promise<Ticket>[] = [];
-        ids.forEach(id => promises.push(this.redmineRequester.getTicket(id)));
+        ids.forEach(id => promises.push(RedmineRequester.getTicket(id)));
         return Promise.all(promises);
     }
 
-    private async createDocument(tickets: Ticket[]): Promise<Document> {
+    async function createDocument(tickets: Ticket[]): Promise<Document> {
         const promisedRows: Promise<Row>[] = [];
-        tickets.forEach(t => promisedRows.push(this.ticketToRowConverter.convert(t)));
+        tickets.forEach(t => promisedRows.push(TicketToRowConverter.convert(t)));
         const rows = await Promise.all(promisedRows);
         return new Document(rows, ROWS_PER_PAGE, WIDTH, HEIGHT, MARGIN);
     }
 
-    private createPdfAndConvertToObjectUrl(document: Document): string {
-        const pdf = this.pdfCreator.create(document);
+    function createPdfAndConvertToObjectUrl(document: Document): string {
+        const pdf = PdfCreator.create(document);
         const pdfBlob = pdf.output('blob');
         return window.URL.createObjectURL(pdfBlob);
     }
 
-    private print(objectUrl: string) {
+    function print(objectUrl: string) {
         const overlay = document.createElement('div');
         overlay.id = 'printingoverlay';
         overlay.style.position = 'fixed';
