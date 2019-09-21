@@ -53,7 +53,7 @@ export module TicketToRowConverter {
         return new Row(
             new Cell(getOrBlank(() => ticket.subject), settings.centerFormatting),
             new Cell(getOrBlank(() => `Karte #${ticket.id}`), settings.topLeftFormatting),
-            Cell.empty(),
+            new Cell(getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr || '-'}`), settings.topRightFormatting),
             new Cell(getOrBlank(() => `Priorität: ${ticket.priority.name}`), settings.bottomLeftFormatting),
             new Cell(getOrElse(() => `Feature #${ticket.parent.id}`, 'Kein Feature'), settings.bottomRightFormatting)
         );
@@ -62,8 +62,8 @@ export module TicketToRowConverter {
     function convertMisc(ticket: TicketExtended, settings: Settings): Row {
         return new Row(
             new Cell(getOrBlank(() => ticket.subject), settings.centerFormatting),
-            new Cell(getOrBlank(() => `Karte #${ticket.id}`), settings.topLeftFormatting),
-            Cell.empty(),
+            new Cell(getOrBlank(() => `Misc #${ticket.id}`), settings.topLeftFormatting),
+            new Cell(getOrBlank(() => `Backlog-Nr: ${ticket.backlog_nr || '-'}`), settings.topRightFormatting),
             new Cell(getOrBlank(() => `Priorität: ${ticket.priority.name}`), settings.bottomLeftFormatting),
             Cell.empty()
         );

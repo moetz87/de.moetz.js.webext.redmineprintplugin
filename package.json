@@ -1,6 +1,6 @@
 {
     "name": "de.moetz.js.webext.print",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "scripts": {
         "clean": "rm -rf node_modules/ && rm -rf extension/**/*.js && rm -rf dist/",
         "build": "npm run webpack -- --mode production",

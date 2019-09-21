@@ -21,7 +21,7 @@ export module PdfCreator {
             pdf.text(row.bottomRight.text, calcRight(doc), calcBottom(doc, rowOnPage), 'right');
             // center
             setFontOptions(pdf, row.center);
-            const center = pdf.splitTextToSize(row.center.text, doc.width);
+            const center = pdf.splitTextToSize(row.center.text, doc.width - doc.margin);
             pdf.text(center, calcCenter(doc), calcMiddle(doc, rowOnPage), 'center');
             // end
             drawLineOrCreateNewPage(doc, pdf, rowNumber);
