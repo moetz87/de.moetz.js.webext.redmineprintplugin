@@ -10,77 +10,79 @@
 
 <body>
 
-    <div class="titleheader">Allgemeine Einstellungen</div>
-    <div id="generalsettings" class="content">
-        <div class="entry first">
-            <div class="key">Redmine Basis-URL:</div>
-            <div class="value">
-                <input id="urlField" type="text">
+<div class="titleheader">Allgemeine Einstellungen</div>
+<div id="generalsettings" class="content">
+    <div class="entry first">
+        <div class="key">Redmine Basis-URL:</div>
+        <div class="value">
+            <input id="urlField" type="text">
+        </div>
+    </div>
+    <div class="entry">
+        <div class="key inline">API-Token (<a id="tokenLink" href="">hier abrufbar</a>):</div>
+        <img id="whatIsApiToken" class="inline" src="../icons/questionmark.png"
+             title="Ein an einen Redmine-Benutzer gebundenes Token, das verwendet werden kann, um authorisierte Anfragen im Namen dieses Benutzers gegen die Redmine-REST-API zu stellen. Wird von dieser Webextension verwendet, um alle notwendigen Informatinoen zum Drucken der ausgewählten Tickets zu laden.">
+        <div class="value">
+            <input id="tokenField" type="text">
+        </div>
+    </div>
+</div>
+
+<div class="titleheader">Druckspezifische Einstellungen</div>
+<div id="printsettings" class="content last">
+    <div id="ticketbackground">
+        <div class="flex-container">
+            <!-- top left -->
+            <div class="flex-item left">
+                <label for="topleftfontsize">Schriftgröße (pt):</label>
+                <input id="topleftfontsize" type="number">
+                <br>
+                <label for="topleftfontbold">Fettgedruckt:</label>
+                <input id="topleftfontbold" type="checkbox">
+            </div>
+            <!-- top right -->
+            <div class="flex-item right">
+                <label for="toprightfontsize">Schriftgröße (pt):</label>
+                <input id="toprightfontsize" type="number">
+                <br>
+                <label for="toprightfontbold">Fettgedruckt:</label>
+                <input id="toprightfontbold" type="checkbox">
             </div>
         </div>
-        <div class="entry">
-            <div class="key">API-Token (<a id="tokenLink" href="">hier</a>):</div>
-            <div class="value">
-                <input id="tokenField" type="text">
+        <div class="flex-container">
+            <!-- center -->
+            <div class="flex-item center">
+                <label for="centerfontsize">Schriftgröße (pt):</label>
+                <input id="centerfontsize" type="number">
+                <br>
+                <label for="centerfontbold">Fettgedruckt:</label>
+                <input id="centerfontbold" type="checkbox">
+            </div>
+        </div>
+        <div class="flex-container">
+            <!-- bottom left -->
+            <div class="flex-item left">
+                <label for="bottomleftfontsize">Schriftgröße (pt):</label>
+                <input id="bottomleftfontsize" type="number">
+                <br>
+                <label for="bottomleftfontbold">Fettgedruckt:</label>
+                <input id="bottomleftfontbold" type="checkbox">
+            </div>
+            <!-- bottom right -->
+            <div class="flex-item right">
+                <label for="bottomrightfontsize">Schriftgröße (pt):</label>
+                <input id="bottomrightfontsize" type="number">
+                <br>
+                <label for="bottomrightfontbold">Fettgedruckt:</label>
+                <input id="bottomrightfontbold" type="checkbox">
             </div>
         </div>
     </div>
+</div>
 
-    <div class="titleheader">Druckspezifische Einstellungen</div>
-    <div id="printsettings" class="content last">
-        <div id="ticketbackground">
-            <div class="flex-container">
-                <!-- top left -->
-                <div class="flex-item left">
-                    <label for="topleftfontsize">Schriftgröße (pt):</label>
-                    <input id="topleftfontsize" type="number">
-                    <br>
-                    <label for="topleftfontbold">Fettgedruckt:</label>
-                    <input id="topleftfontbold" type="checkbox">
-                </div>
-                <!-- top right -->
-                <div class="flex-item right">
-                    <label for="toprightfontsize">Schriftgröße (pt):</label>
-                    <input id="toprightfontsize" type="number">
-                    <br>
-                    <label for="toprightfontbold">Fettgedruckt:</label>
-                    <input id="toprightfontbold" type="checkbox">
-                </div>
-            </div>
-            <div class="flex-container">
-                <!-- center -->
-                <div class="flex-item center">
-                    <label for="centerfontsize">Schriftgröße (pt):</label>
-                    <input id="centerfontsize" type="number">
-                    <br>
-                    <label for="centerfontbold">Fettgedruckt:</label>
-                    <input id="centerfontbold" type="checkbox">
-                </div>
-            </div>
-            <div class="flex-container">
-                <!-- bottom left -->
-                <div class="flex-item left">
-                    <label for="bottomleftfontsize">Schriftgröße (pt):</label>
-                    <input id="bottomleftfontsize" type="number">
-                    <br>
-                    <label for="bottomleftfontbold">Fettgedruckt:</label>
-                    <input id="bottomleftfontbold" type="checkbox">
-                </div>
-                <!-- bottom right -->
-                <div class="flex-item right">
-                    <label for="bottomrightfontsize">Schriftgröße (pt):</label>
-                    <input id="bottomrightfontsize" type="number">
-                    <br>
-                    <label for="bottomrightfontbold">Fettgedruckt:</label>
-                    <input id="bottomrightfontbold" type="checkbox">
-                </div>
-            </div>
-        </div>
-    </div>
+<button type="button" id="savebutton">Speichern</button>
 
-    <button type="button" id="savebutton">Speichern</button>
-
-    <script src="index.js"></script>
+<script src="index.js"></script>
 
 </body>
 

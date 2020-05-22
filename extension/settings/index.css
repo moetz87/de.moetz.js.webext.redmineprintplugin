@@ -70,7 +70,6 @@ input {
 }
 
 
-
 /**************************/
 /* General Settings */
 /**************************/
@@ -95,6 +94,11 @@ input {
 
 #generalsettings .entry .value input {
     width: 100%;
+}
+
+#generalsettings #whatIsApiToken {
+    height: 18px;
+    float: right;
 }
 
 /**************************/

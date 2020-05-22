@@ -1,11 +1,13 @@
-import { HtmlUtils } from '../shared/utils/html-utils';
-import { Document } from './entities/document';
-import { Row } from './entities/document';
+import { Document, Row } from './entities/document';
+import { Settings } from './entities/settings';
 import { Ticket } from './entities/ticket';
+import { withErrorlogging } from './executor';
 import { Messager } from './messager';
 import { PdfCreator } from './pdf-creator';
 import { RedmineRequester } from './redmine-requester';
 import { TicketToRowConverter } from './ticket-to-row-converter';
+import { HtmlUtils } from './utils/html-utils';
+import { SettingsLoader } from './utils/settings-loader';
 
 const ROWS_PER_PAGE = 3;
 const HEIGHT = 841.89;
@@ -19,6 +21,13 @@ export module TicketPrinter {
             Messager.showMessage('Info', 'Keine druckbaren Tickets gewählt.');
             return Promise.resolve();
         }
+
+        const settings = await withErrorlogging('Fehler beim Laden der Einstellungen.', () => SettingsLoader.load(Settings));
+        if (settings.token === undefined || settings.token === '') {
+            Messager.showMessage('Fehler', `Kein API-Token gesetzt. Bitte in den Addon-Einstellungen konfigurneren:\nMenü > Addons > Erweiterungen > Redmine Print Plugin > Einstellungen`);
+            return Promise.resolve();
+        }
+
         const tickets = await loadTickets(ids);
         const document = await createDocument(tickets);
         const objectUrl = createPdfAndConvertToObjectUrl(document);
