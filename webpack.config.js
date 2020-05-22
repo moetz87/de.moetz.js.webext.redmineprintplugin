@@ -1,6 +1,7 @@
 var settings = [
     { src: 'settings/main.ts', dst: 'settings/index.js', target: 'web' },
-    { src: 'content-scripts/printbuttons.ts', dst: 'content-scripts/printbuttons.js', target: 'web' },
+    { src: 'content-scripts/printbuttons-iterationview.ts', dst: 'content-scripts/printbuttons-iterationview.js', target: 'web' },
+    { src: 'content-scripts/printbuttons-ticketview.ts', dst: 'content-scripts/printbuttons-ticketview.js', target: 'web' },
     { src: 'background-scripts/messager.ts', dst: 'background-scripts/messager.js', target: 'web' }
 ];
 

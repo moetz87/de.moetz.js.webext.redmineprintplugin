@@ -6,7 +6,8 @@ import { UserInterface } from './user-interface';
 
 export class Main {
 
-    constructor(readonly ui: UserInterface) { }
+    constructor(readonly ui: UserInterface) {
+    }
 
     public async main() {
         try {

@@ -23,10 +23,17 @@
     "content_scripts": [
         {
             "matches": [
-                "<all_urls>"
+                "https://redmine.n-design.de/projects/*/issues",
+                "https://redmine.n-design.de/projects/*/issues?*"
             ],
             "js": [
-                "content-scripts/printbuttons.js"
+                "content-scripts/printbuttons-iterationview.js"
+            ]
+        },
+        {
+            "matches": [ "https://redmine.n-design.de/issues/*" ],
+            "js": [
+                "content-scripts/printbuttons-ticketview.js"
             ]
         }
     ],
@@ -37,7 +44,6 @@
     },
     "permissions": [
         "storage",
-        "<all_urls>",
         "notifications"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';"

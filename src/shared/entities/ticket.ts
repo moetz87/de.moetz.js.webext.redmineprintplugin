@@ -22,8 +22,13 @@ export class TicketExtended implements Ticket {
         Object.assign(this, ticket);
     }
 
-    public get backlog_nr() { return this.getCustomField('BacklogNr'); }
-    public get komplexitaetspunkte() { return this.getCustomField('Komplexitätspunkte'); }
+    public get backlog_nr() {
+        return this.getCustomField('BacklogNr');
+    }
+
+    public get komplexitaetspunkte() {
+        return this.getCustomField('Komplexitätspunkte');
+    }
 
     private getCustomField(name: string): any {
         const field = (this.custom_fields && this.custom_fields.find(f => f.name === name));

@@ -1,8 +1,8 @@
-import { SettingsLoader } from '../shared/utils/settings-loader';
 import { Cell, Row } from './entities/document';
 import { Settings } from './entities/settings';
 import { Ticket, TicketExtended } from './entities/ticket';
 import { Messager } from './messager';
+import { SettingsLoader } from './utils/settings-loader';
 
 export module TicketToRowConverter {
 

@@ -3,7 +3,6 @@ import { Formatting } from './formatting';
 export class Settings {
 
     constructor(
-        public url = 'https://redmine.n-design.de',
         public token = '',
         public topLeftFormatting = new Formatting(),
         public topRightFormatting = new Formatting(),

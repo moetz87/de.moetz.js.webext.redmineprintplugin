@@ -1,8 +1,8 @@
-import { SettingsLoader } from '../shared/utils/settings-loader';
 import { Settings } from './entities/settings';
 import { Ticket } from './entities/ticket';
 import { withErrorlogging } from './executor';
 import { Messager } from './messager';
+import { SettingsLoader } from './utils/settings-loader';
 
 const TIMEOUT_IN_MS = 5000;
 
@@ -10,7 +10,7 @@ export module RedmineRequester {
 
     export async function getTicket(id: number): Promise<Ticket> {
         const settings = await withErrorlogging('Fehler beim Laden der Einstellungen.', () => SettingsLoader.load(Settings));
-        const url = `${settings.url}/issues/${id}.json`;
+        const url = `https://redmine.n-design.de/issues/${id}.json`;
         return new Promise<Ticket>((resolve, reject) => {
             const req = new XMLHttpRequest();
             req.timeout = TIMEOUT_IN_MS;

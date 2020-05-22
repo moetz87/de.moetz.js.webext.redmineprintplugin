@@ -6,7 +6,6 @@ import { SettingsLoader } from '../shared/utils/settings-loader';
 
 export class UserInterface {
 
-    private readonly urlField = HtmlUtils.findFirst<HTMLInputElement>('#urlField');
     private readonly tokenField = HtmlUtils.findFirst<HTMLInputElement>('#tokenField');
     private readonly tokenLink = HtmlUtils.findFirst<HTMLAnchorElement>('#tokenLink');
     private readonly topLeftFrontSizeField = HtmlUtils.findFirst<HTMLInputElement>('#topleftfontsize');
@@ -21,19 +20,16 @@ export class UserInterface {
     private readonly bottomRightFontBoldField = HtmlUtils.findFirst<HTMLInputElement>('#bottomrightfontbold');
     private readonly saveButton = HtmlUtils.findFirst<HTMLButtonElement>('#savebutton');
 
-
     constructor() {
         this.saveButton.onclick = () => SettingsLoader.save(this.getSettings())
             .then(() => Messager.showMessage('Erfolg', 'Einstellungen gespeichert.'))
             .catch(() => Messager.showMessage('Fehler', 'Fehler beim Speichern der Einstellungen.'));
 
-        this.urlField.oninput = () => this.tokenLink.href = `${this.urlField.value}/my/api_key`;
     }
 
     public setSettings = (settings: Settings) => {
-        this.urlField.value = settings.url;
         this.tokenField.value = settings.token || '';
-        this.tokenLink.href = `${settings.url}/my/api_key`;
+        this.tokenLink.href = 'https://redmine.n-design.de/my/api_key';
         this.topLeftFrontSizeField.valueAsNumber = settings.topLeftFormatting.fontSize;
         this.topLeftFontBoldField.checked = settings.topLeftFormatting.fontBold;
         this.topRightFontSizeField.valueAsNumber = settings.topRightFormatting.fontSize;
@@ -44,7 +40,7 @@ export class UserInterface {
         this.bottomLeftFontBoldField.checked = settings.bottomLeftFormatting.fontBold;
         this.bottomRightFontSizeField.valueAsNumber = settings.bottomRightFormatting.fontSize;
         this.bottomRightFontBoldField.checked = settings.bottomRightFormatting.fontBold;
-    }
+    };
 
     public getSettings(): Settings {
         const topLeftFormatting = new Formatting(
@@ -68,7 +64,6 @@ export class UserInterface {
             this.bottomRightFontBoldField.checked
         );
         return new Settings(
-            this.urlField.value,
             this.tokenField.value,
             topLeftFormatting,
             topRightFormatting,

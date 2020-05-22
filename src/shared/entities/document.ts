@@ -11,7 +11,8 @@ export class Document {
         readonly width: number,
         readonly height: number,
         readonly margin: number
-    ) { }
+    ) {
+    }
 
 }
 
@@ -22,7 +23,8 @@ export class Row {
         readonly topLeft: Cell,
         readonly topRight: Cell,
         readonly bottomLeft: Cell,
-        readonly bottomRight: Cell) { }
+        readonly bottomRight: Cell) {
+    }
 
 }
 
@@ -30,7 +32,8 @@ export class Cell {
 
     constructor(
         readonly text: string,
-        readonly formatting: Formatting) { }
+        readonly formatting: Formatting) {
+    }
 
     public static empty(): Cell {
         return new Cell('', DEFAULT_FORMATTING);
